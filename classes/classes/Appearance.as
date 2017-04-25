@@ -481,7 +481,7 @@
 			}
 			var isPierced:Boolean = (creature.cocks.length == 1) && (creature.cocks[cockIndex].isPierced); //Only describe as pierced or sock covered if the creature has just one cock
 			var hasSock:Boolean = (creature.cocks.length == 1) && (creature.cocks[cockIndex].sock != "");
-			var isGooey:Boolean = (creature.skinType == CoC.SKIN_TYPE_GOO);
+			var isGooey:Boolean = (creature.skinType == SKIN_TYPE_GOO);
 			return cockDescription(cockType, creature.cocks[cockIndex].cockLength, creature.cocks[cockIndex].cockThickness, creature.lust, creature.cumQ(), isPierced, hasSock, isGooey);
 		}
 
@@ -2018,12 +2018,11 @@
 			return DEFAULT_EYES_NAMES[i_creature.eyeType] + " eyes";
 		}
 
-		public static function nagaLowerBodyColor2(i_creature:Creature):String
+		public static function lighterColor(color:String):String
 		{
-			if (i_creature.underBody.skin.tone in NAGA_LOWER_BODY_COLORS)
-				return NAGA_LOWER_BODY_COLORS[i_creature.underBody.skin.tone];
-
-			return i_creature.underBody.skin.tone;
+			if (color in LIGHTER_COLORS)
+				return LIGHTER_COLORS[color];
+			return color;
 		}
 
 /* All of these functions have been replaced with direct calls to the appropriate form of cockNoun().
@@ -2190,7 +2189,7 @@
 			return result;
 		}
 
-		public static const NAGA_LOWER_BODY_COLORS:Object = createMapFromPairs(
+		public static const LIGHTER_COLORS:Object = createMapFromPairs(
 				[
 					["red",          "orange"],
 					["orange",       "yellow"],

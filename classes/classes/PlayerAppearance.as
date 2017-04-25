@@ -805,7 +805,7 @@ package classes
 				if (player.hasReptileUnderBody(true)) {
 					var nagaColors:Array = ["", ""];
 					if (player.underBody.type == UNDER_BODY_TYPE_NAGA)
-						nagaColors = [player.underBody.skin.tone, player.nagaLowerBodyColor2()];
+						nagaColors = [player.underBody.skin.tone, Appearance.lighterColor(player.underBody.skin.tone)];
 					else
 						nagaColors = [player.skin.tone, player.underBody.skin.tone];
 

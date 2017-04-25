@@ -186,7 +186,7 @@ package classes
 		1 - furry
 		2 - scaley
 		3 - goopey*/
-		public var skin:Skin = new Skin();
+		public var skin:Skin;
 		public function get skinType():Number { return skin.type; }
 		public function set skinType(value:Number):void { skin.type = value; }
 		public function get skinTone():String { return skin.tone; }
@@ -405,7 +405,21 @@ package classes
 		public var nippleLength:Number = .25;
 		public var breastRows:Array;
 		public var ass:AssClass = new AssClass();
-		
+		//Constructor
+		public function Creature()
+		{
+			skin = new Skin(this);
+			//cocks = new Array();
+			//The world isn't ready for typed Arrays just yet.
+			cocks = [];
+			vaginas = new Vector.<VaginaClass>();
+			breastRows = [];
+			_perks = [];
+			statusEffects = [];
+			//keyItems = new Array();
+			underBody = new UnderBody();
+		}
+
 		/**
 		 * Check if the Creature has a vagina. If not, throw an informative Error.
 		 * This should be more informative than the usual RangeError (Out of bounds).
@@ -558,19 +572,6 @@ package classes
 		//TODO: Move monster status effects into perks. Needs investigation though.
 		public var statusEffects:Array;
 
-		//Constructor
-		public function Creature()
-		{
-			//cocks = new Array();
-			//The world isn't ready for typed Arrays just yet.
-			cocks = [];
-			vaginas = new Vector.<VaginaClass>();
-			breastRows = [];
-			_perks = [];
-			statusEffects = [];
-			//keyItems = new Array();
-			underBody = new UnderBody(this);
-		}
 
 		//Functions			
 		public function orgasmReal():void
@@ -1529,7 +1530,7 @@ package classes
 			if (index < 0) index = biggestCockIndex();
 			var isPierced:Boolean = (cocks.length == 1) && (cocks[index].isPierced); //Only describe as pierced or sock covered if the creature has just one cock
 			var hasSock:Boolean = (cocks.length == 1) && (cocks[index].sock != "");
-			var isGooey:Boolean = (skinType == CoC.SKIN_TYPE_GOO);
+			var isGooey:Boolean = (skinType == SKIN_TYPE_GOO);
 			return Appearance.cockAdjective(cocks[index].cockType, cocks[index].cockLength, cocks[index].cockThickness, lust, cumQ(), isPierced, hasSock, isGooey);
 		}
 		
@@ -1938,8 +1939,8 @@ package classes
 			if (!hasCock()) return 0;
 			var cumCap:Number = 0;
 			//Alter capacity by balls.
-			if (balls > 0) cumCap += Math.pow(((4 / 3) * Math.PI * (ballSize / 2)), 3) * balls// * cumMultiplier
-			else cumCap +=  Math.pow(((4 / 3) * Math.PI * 1), 3) * 2// * cumMultiplier
+			if (balls > 0) cumCap += Math.pow(((4 / 3) * Math.PI * (ballSize / 2)), 3) * balls;// * cumMultiplier
+			else cumCap +=  Math.pow(((4 / 3) * Math.PI * 1), 3) * 2;// * cumMultiplier
 			//Alter capacity by perks.
 			if (findPerk(PerkLib.BroBody) >= 0) cumCap *= 1.3;
 			if (findPerk(PerkLib.FertilityPlus) >= 0) cumCap *= 1.5;
@@ -1957,8 +1958,8 @@ package classes
 			//Alter capacity by accessories.
 			if (jewelryEffectId == JewelryLib.MODIFIER_FERTILITY) cumCap *= (1 + (jewelryEffectMagnitude / 100));
 				
-			cumCap *= cumMultiplier
-			cumCap == Math.round(cumCap);
+			cumCap *= cumMultiplier;
+			cumCap = Math.round(cumCap);
 			if (cumCap > int.MAX_VALUE) 
 				cumCap = int.MAX_VALUE;
 			return cumCap;

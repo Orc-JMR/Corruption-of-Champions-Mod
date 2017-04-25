@@ -12,16 +12,16 @@ package classes.BodyParts
 		include "../../../includes/appearanceDefs.as";
 
 		public var type:Number = UNDER_BODY_TYPE_NONE;
-		public var skin:Skin = new Skin();
+		public var skin:Skin;
 
 		private var _creature:Creature;
 
 		public function UnderBody(creature:Creature = null)
 		{
 			_creature = creature;
+			this.skin = new Skin(_creature);
 		}
 
-		public function skinDescription(...args):String { return skin.description.apply(null, args); }
 		public function skinFurScales(...args):String { return skin.skinFurScales.apply(null, args); }
 
 		public function copySkin(p:Object = null):void

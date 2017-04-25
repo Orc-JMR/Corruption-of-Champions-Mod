@@ -1,4 +1,4 @@
-﻿package classes
+﻿﻿package classes
 {
 import classes.GlobalFlags.kFLAGS;
 import classes.GlobalFlags.kGAMECLASS;
