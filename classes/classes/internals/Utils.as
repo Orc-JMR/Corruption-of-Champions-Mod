@@ -47,6 +47,12 @@ public class Utils extends Object
 			return dest;
 		}
 		/**
+		 * Returns a shallow copy of `src` ownProperties
+		 */
+		public static function shallowCopy(src:Object):Object {
+			return copyObject({},src);
+		}
+		/**
 		 * Performs a shallow copy of properties from `src` to `dest`.
 		 * If `properties` is supplied, only listed properties are copied.
 		 * If not, all ownProperties of `src` are copied.

@@ -2024,6 +2024,12 @@
 				return LIGHTER_COLORS[color];
 			return color;
 		}
+		public static function secondaryScaleColor(color:String):String
+		{
+			if (color in SCALE_SECONDARY_COLORS)
+				return SCALE_SECONDARY_COLORS[color];
+			return color;
+		}
 
 /* All of these functions have been replaced with direct calls to the appropriate form of cockNoun().
 		private static function humanDescript(cockNum:Number):String
@@ -2193,23 +2199,28 @@
 				[
 					["red",          "orange"],
 					["orange",       "yellow"],
-					["yellow",       "yellowgreen"],
 					["yellowgreen",  "yellow"],
-					["green",        "light green"],
-					["spring green", "cyan"],
 					["cyan",         "ocean blue"],
 					["ocean blue",   "light blue"],
 					["blue",         "light blue"],
 					["purple",       "light purple"],
-					["magenta",      "blue"],
 					["deep pink",    "pink"],
-					["black",        "dark gray"],
-					["white",        "light gray"],
-					["gray",         "light gray"],
-					["light gray",   "white"],
-					["dark gray",    "gray"],
 					["pink",         "pale pink"],
+					["black",        "dark gray"],
+					["dark gray",    "gray"],
+					["gray",         "light gray"],
+					["light gray",   "white"]
 				]
+		);
+		public static const SCALE_SECONDARY_COLORS:Object = copyObject(
+				shallowCopy(LIGHTER_COLORS),
+				createMapFromPairs([
+					["green",        "light green"],
+					["yellow",       "yellowgreen"],
+					["spring green", "cyan"],
+					["magenta",      "blue"],
+					["white",        "light gray"]
+				])
 		);
 		public static const DEFAULT_GENDER_NAMES:Object = createMapFromPairs(
 				[
