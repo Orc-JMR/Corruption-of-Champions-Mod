@@ -882,7 +882,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.horns = player.horns;
 		saveFile.data.hornType = player.hornType;
 		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
-		saveFile.data.underBody = player.underBody;
+		saveFile.data.underBody = player.underBody.saveToObject();
 		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		saveFile.data.clawTone = player.clawTone;
@@ -1771,8 +1771,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			player.hornType = saveFile.data.hornType;
 
 		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
-		if (saveFile.data.underBody is UnderBody)
-			player.underBody.setAllProps(saveFile.data.underBody);
+		player.underBody.loadFromObject(saveFile.data.underBody,true);
 		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		player.clawTone = (saveFile.data.clawTone == undefined) ? ""               : saveFile.data.clawTone;

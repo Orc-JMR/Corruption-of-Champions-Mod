@@ -1,20 +1,24 @@
 package classes.BodyParts {
 import classes.Creature;
+import classes.internals.SimpleJsonable;
+import classes.internals.Utils;
 
 /**
  * Container class for the players skin
  * @since December 27, 2016
  * @author Stadler76
  */
-public class Skin extends SkinPart {
+public class Skin extends BodyPart {
 	include "../../../includes/appearanceDefs.as";
 
 	public var desc:String     = "skin";
 	public var furColor:String = "no";
+	public var tone:String = "albino";
+	public var adj:String = "";
+	public var type:int = SKIN_TYPE_PLAIN;
 
 	public function Skin(creature:Creature) {
 		super(creature);
-		tone = "albino";
 	}
 
 	public function skinFurScales():String {
@@ -44,33 +48,29 @@ public class Skin extends SkinPart {
 		return skinzilla;
 	}
 
-	override public function defaultColor():String {
-		return modColor;
-	}
-	override public function defaultAdj():String {
-		return modAdj;
-	}
-
 	public function hasFur():Boolean {
 		return type == SKIN_TYPE_FUR;
 	}
 
 	override public function restore(keepTone:Boolean = true):void {
+		super.restore(keepTone);
+		if (!keepTone) tone = "albino";
 		desc     = "skin";
 		furColor = "no";
+		adj = "";
 	}
 
 	public function setProps(p:Object):void {
-		if (p.hasOwnProperty('type')) type = p.type;
-		if (p.hasOwnProperty('tone')) tone = p.tone;
-		if (p.hasOwnProperty('desc')) desc = p.desc;
-		if (p.hasOwnProperty('adj')) adj = p.adj;
-		if (p.hasOwnProperty('furColor')) furColor = p.furColor;
+		Utils.copyObjectEx(this,p,myPublicPrimitives());
 	}
 
 	public function setAllProps(p:Object, keepTone:Boolean = true):void {
 		restore(keepTone);
 		setProps(p);
+	}
+
+	override protected function myPublicPrimitives():Array {
+		return super.myPublicPrimitives().concat("type","adj","tone","desc","furColor");
 	}
 }
 }

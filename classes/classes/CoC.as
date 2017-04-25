@@ -530,8 +530,8 @@ the text from being too boring.
 			registerClassAlias("Player", Player);
 			registerClassAlias("StatusEffectClass", StatusEffectClass);
 			registerClassAlias("VaginaClass", VaginaClass);
-			registerClassAlias("Skin", Skin);
-			registerClassAlias("UnderBody", UnderBody);
+			//registerClassAlias("Skin", Skin);
+			//registerClassAlias("UnderBody", UnderBody);
 			//registerClassAlias("Enum", Enum);
 
 			//Hide sprites

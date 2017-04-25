@@ -417,7 +417,7 @@ package classes
 			_perks = [];
 			statusEffects = [];
 			//keyItems = new Array();
-			underBody = new UnderBody();
+			underBody = new UnderBody(this);
 		}
 
 		/**

@@ -4,23 +4,33 @@
 package classes.BodyParts {
 import classes.Creature;
 
-public class SkinPart extends BodyPart {
-	protected var modAdj:String = "";
-
-	public function get tone():String {return color;}
-	public function set tone(value:String):void {color = value;}
+public class SkinPart extends BasicBodyPart {
+	public var modAdj:String = "";
 
 	public function get adj():String {return modAdj == "" ? defaultAdj() : modAdj;}
-	public function set adj(value:String):void {modAdj = value;}
 
 	public function defaultAdj():String {return creature.skin.adj;}
 
-	override public function restore(keepTone:Boolean = true):void {
-		super.restore(keepTone);
+	override public function restore(keepColor:Boolean = true):void {
+		super.restore(keepColor);
 		modAdj = "";
 	}
 	public function SkinPart(creature:Creature) {
 		super(creature, SKIN_TYPE_PLAIN);
+	}
+
+	override protected function myPublicPrimitives():Array {
+		return super.myPublicPrimitives().concat("modAdj");
+	}
+	override public function saveToObject():Object {
+		var o:Object = super.saveToObject();
+		o.modAdj = modAdj;
+		return o;
+	}
+	override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
+		super.loadFromObject(o, ignoreErrors);
+		// Upgrade old saves
+		if ("tone" in o && !("color" in o)) this.modColor = o.tone;
 	}
 }
 }

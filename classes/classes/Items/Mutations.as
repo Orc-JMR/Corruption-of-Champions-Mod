@@ -1,4 +1,4 @@
-﻿﻿package classes.Items
+﻿package classes.Items
 {
 	import classes.*;
 	import classes.GlobalFlags.kFLAGS;

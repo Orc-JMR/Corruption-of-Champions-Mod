@@ -3,8 +3,9 @@
  */
 package classes.internals
 {
-	import classes.*;
-	public class Utils extends Object
+import classes.*;
+
+public class Utils extends Object
 	{
 		private static const NUMBER_WORDS_NORMAL:Array		= ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 		private static const NUMBER_WORDS_CAPITAL:Array		= ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
@@ -35,7 +36,98 @@ package classes.internals
 			for (var x:int = 1; x < stringList.length - 1; x++) concat += ", " + stringList[x];
 			return concat + " and " + stringList[stringList.length - 1];
 		}
-
+		/**
+		 * Performs a shallow copy of properties from `src` to `dest`.
+		 * A `hasOwnProperties` check is performed.
+		 */
+		public static function extend(dest:Object, src:Object):Object {
+			for (var k:String in src) {
+				if (src.hasOwnProperty(k)) dest[k] = src;
+			}
+			return dest;
+		}
+		/**
+		 * Performs a shallow copy of properties from `src` to `dest`.
+		 * If `properties` is supplied, only listed properties are copied.
+		 * If not, all ownProperties of `src` are copied.
+		 *
+		 * @param properties array of property descriptors:
+		 * <ul><li><code>key:String</code>
+		 *     =&gt; <code>dest[key] = src.key]</code></li>
+		 *     <li><code>[dkey:String, skey:String]</code>
+		 *     =&gt; <code>dest[dkey] = src[skey]</code>
+		 *     <li>object with properties:
+		 *         <ul><li><code>skey:String, dkey:String</code> or <code>key:String</code></li>
+		 *         <li>(optional) <code>'default':*|Function</code> to provide default value.
+		 *         If function, called with no arguments</li></ul>
+		 * </ul>
+		 * @return dest
+		 */
+		public static function copyObject(dest:Object, src:Object,...properties:Array):Object {
+			return copyObjectEx(dest, src, properties, true);
+		}
+		/**
+		 * @see Utils.copyObject
+		 * @param forward if true, use <code>dest[dkey]</code> and <code>src[skey]</code>.
+		 * if false, use <code>dest[skey]</code> and <code>src[dkey]</code>.
+		 * This option is useful when you have one set of descriptors to use it in both directions
+		 * @param ignoreErrors If assignment throws an error, continue to next property.
+		 * @return dest
+		 */
+		public static function copyObjectEx(dest:Object, src:Object, properties:Array, forward:Boolean = true, ignoreErrors:Boolean = false):Object {
+			if (properties.length == 0) return extend(dest,src);
+			for each (var pd:* in properties) {
+				var skey:String,dkey:String,v:*;
+				var def:*,hasDefault:Boolean=false;
+				if (pd is String) {
+					skey = pd;
+					dkey = pd;
+				} else if (pd is Array) {
+					if (pd.length==2) {
+						if (forward) {
+							dkey = pd[0];
+							skey = pd[1];
+						}else {
+							dkey = pd[1];
+							skey = pd[0];
+						}
+					} else trace("WARNING: incorrect copyObject property descriptor "+JSON.stringify(pd));
+				} else if (pd is Object) {
+					if ("key" in pd) {
+						skey = dkey = pd.key;
+					} else if ("skey" in pd && "dkey" in pd) {
+						skey = pd.skey;
+						dkey = pd.dkey;
+					} else {
+						trace("WARNING: missing 'key' or 'skey'+'dkey' in property descriptor "+JSON.stringify(pd));
+						continue;
+					}
+					if (!forward) {
+						// we can't do it in the assignment below because of the check
+						var tmp:String = skey;
+						skey = dkey;
+						dkey = tmp;
+					}
+					if ("default" in pd) {
+						def = pd["default"];
+						hasDefault = true;
+					}
+				}
+				if (skey in src) {
+					v = src[skey];
+				} else if (hasDefault) {
+					if (def is Function) v = def();
+					else v = def();
+				}
+				try {
+					dest[dkey] = v;
+				} catch (e:*) {
+					if (!ignoreErrors) throw e;
+					trace(e);
+				}
+			}
+			return dest;
+		}
 		/**
 		 * Convert a mixed array to an array of strings
 		 * 

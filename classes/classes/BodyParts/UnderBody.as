@@ -1,13 +1,14 @@
 package classes.BodyParts 
 {
-	import classes.Creature;
+import classes.Creature;
+import classes.internals.SimpleJsonable;
 
-	/**
+/**
 	 * Container class for the players underbody
 	 * @since December 31, 2016
 	 * @author Stadler76
 	 */
-	public class UnderBody 
+	public class UnderBody extends SimpleJsonable
 	{
 		include "../../../includes/appearanceDefs.as";
 
@@ -16,7 +17,19 @@ package classes.BodyParts
 
 		private var _creature:Creature;
 
-		public function UnderBody(creature:Creature = null)
+
+	override protected function myPublicPrimitives(): Array {
+		return ["type"];
+	}
+	override protected function myPublicJsonables(): Array {
+		return ["skin"];
+	}
+	override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
+		this.restore(false);
+		super.loadFromObject(o, ignoreErrors);
+	}
+
+	public function UnderBody(creature:Creature)
 		{
 			_creature = creature;
 			this.skin = new Skin(_creature);
