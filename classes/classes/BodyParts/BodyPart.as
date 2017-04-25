@@ -5,7 +5,7 @@ package classes.BodyParts {
 import classes.Creature;
 import classes.internals.SimpleJsonable;
 
-public class BodyPart extends SimpleJsonable{
+public class BodyPart extends SimpleJsonable {
 	include "../../../includes/appearanceDefs.as";
 
 	public function restore(keepColor:Boolean = true):void {
@@ -16,7 +16,7 @@ public class BodyPart extends SimpleJsonable{
 	}
 	protected var creature:Creature;
 	public function BodyPart(creature:Creature) {
-		this.creature       = creature;
+		this.creature = creature;
 	}
 }
 }

@@ -17,6 +17,7 @@ public class BasicBodyPart extends BodyPart {
 
 	override public function restore(keepColor:Boolean = true):void {
 		super.restore(keepColor);
+		this.type = _restoreToType;
 	}
 	public function BasicBodyPart(creature:Creature, restoreToType:int) {
 		super(creature);

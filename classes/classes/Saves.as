@@ -890,7 +890,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		// </mod>
 		saveFile.data.wingDesc = player.wingDesc;
 		saveFile.data.wingType = player.wingType;
-		saveFile.data.lowerBody = player.lowerBody;
+		saveFile.data.lowerBodyPart = player.lowerBodyPart.saveToObject();
 		saveFile.data.legCount = player.legCount;
 		saveFile.data.tailType = player.tailType;
 		saveFile.data.tailVenum = player.tailVenom;
@@ -1360,6 +1360,40 @@ public function onDataLoaded(evt:Event):void
 	//playerMenu();
 }
 
+private function unFuckSaveDataBeforeLoading(data:Object):void {
+	if (data.lowerBodyPart === undefined) {
+		if (data.legCount == undefined) {
+			switch (data.lowerBody) {
+				case LOWER_BODY_TYPE_DRIDER_LOWER_BODY:
+					data.legCount = 8;
+					break;
+				case LOWER_BODY_TYPE_CENTAUR:
+					data.legCount  = 4;
+					data.lowerBody = LOWER_BODY_TYPE_HOOFED;
+					break;
+				case LOWER_BODY_TYPE_PONY:
+					data.legCount = 4;
+					break;
+				case LOWER_BODY_TYPE_DEERTAUR:
+					data.legCount  = 4;
+					data.lowerBody = LOWER_BODY_TYPE_CLOVEN_HOOFED;
+					break;
+				case LOWER_BODY_TYPE_NAGA:
+					data.legCount = 1;
+					break;
+				case LOWER_BODY_TYPE_GOO:
+					data.legCount = 1;
+					break;
+				default:
+					data.legCount = 2;
+			}
+		}
+		data.lowerBodyPart = {
+			type    : data.lowerBody,
+			legCount: data.legCount
+		};
+	}
+}
 public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 {
 	var game:CoC = getGame();
@@ -1404,7 +1438,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			game.versionID = saveFile.data.versionID;
 			trace("Found internal versionID:", game.versionID);
 		}
-
+		unFuckSaveDataBeforeLoading(saveFile.data);
 		//PIERCINGS
 		
 		//trace("LOADING PIERCINGS");
@@ -1780,39 +1814,13 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 
 		player.wingDesc = saveFile.data.wingDesc;
 		player.wingType = saveFile.data.wingType;
-		player.lowerBody = saveFile.data.lowerBody;
+		player.lowerBodyPart.loadFromObject(saveFile.data.lowerBody,true);
 		player.tailType = saveFile.data.tailType;
 		player.tailVenom = saveFile.data.tailVenum;
 		player.tailRecharge = saveFile.data.tailRecharge;
 		player.hipRating = saveFile.data.hipRating;
 		player.buttRating = saveFile.data.buttRating;
-		
-		if (saveFile.data.legCount == undefined) {
-			if (player.lowerBody == LOWER_BODY_TYPE_DRIDER_LOWER_BODY) {
-				player.legCount = 8;
-			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_CENTAUR) {
-				player.legCount = 4;
-				player.lowerBody = LOWER_BODY_TYPE_HOOFED;
-			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_PONY) {
-				player.legCount = 4;
-			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_DEERTAUR) {
-				player.legCount = 4;
-				player.lowerBody = LOWER_BODY_TYPE_CLOVEN_HOOFED;
-			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_NAGA) {
-				player.legCount = 1;
-			}
-			else if (player.lowerBody == LOWER_BODY_TYPE_GOO) {
-				player.legCount = 1;
-			}
-			else player.legCount = 2;
-		}
-		else
-			player.legCount = saveFile.data.legCount;
-		
+
 		//Sexual Stuff
 		player.balls = saveFile.data.balls;
 		player.cumMultiplier = saveFile.data.cumMultiplier;

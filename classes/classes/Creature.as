@@ -1,7 +1,8 @@
 ﻿//CoC Creature.as
 package classes
 {
-	import classes.BodyParts.Skin;
+import classes.BodyParts.LowerBody;
+import classes.BodyParts.Skin;
 	import classes.BodyParts.UnderBody;
 	import classes.GlobalFlags.kGAMECLASS;
 	import classes.GlobalFlags.kFLAGS;
@@ -290,8 +291,11 @@ package classes
 		17 - foxpaws
 		18 - dragonfeet
 		19 - raccoonfeet*/
-		public var lowerBody:Number = LOWER_BODY_TYPE_HUMAN;
-		public var legCount:Number = 2;
+		public function get lowerBody():int { return lowerBodyPart.type; }
+		public function set lowerBody(value:int):void { lowerBodyPart.type = value; }
+		public var lowerBodyPart:LowerBody;
+		public function get legCount():int { return lowerBodyPart.legCount; }
+		public function set legCount(value:int):void{ lowerBodyPart.legCount = value; }
 
 		/*tailType:
 		0 - none
