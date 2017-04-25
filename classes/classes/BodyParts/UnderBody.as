@@ -18,12 +18,6 @@ import classes.internals.SimpleJsonable;
 		private var _creature:Creature;
 
 
-	override protected function myPublicPrimitives(): Array {
-		return ["type"];
-	}
-	override protected function myPublicJsonables(): Array {
-		return ["skin"];
-	}
 	override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
 		this.restore(false);
 		super.loadFromObject(o, ignoreErrors);
@@ -33,6 +27,8 @@ import classes.internals.SimpleJsonable;
 		{
 			_creature = creature;
 			this.skin = new Skin(_creature);
+			addPublicPrimitives("type");
+			addPublicJsonable(skin);
 		}
 
 		public function skinFurScales(...args):String { return skin.skinFurScales.apply(null, args); }

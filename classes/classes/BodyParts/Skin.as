@@ -19,6 +19,7 @@ public class Skin extends BodyPart {
 
 	public function Skin(creature:Creature) {
 		super(creature);
+		addPublicPrimitives("type","adj","tone","desc","furColor");
 	}
 
 	public function skinFurScales():String {
@@ -61,16 +62,12 @@ public class Skin extends BodyPart {
 	}
 
 	public function setProps(p:Object):void {
-		Utils.copyObjectEx(this,p,myPublicPrimitives());
+		Utils.copyObjectEx(this,p,myPublicPrimitives);
 	}
 
 	public function setAllProps(p:Object, keepTone:Boolean = true):void {
 		restore(keepTone);
 		setProps(p);
-	}
-
-	override protected function myPublicPrimitives():Array {
-		return super.myPublicPrimitives().concat("type","adj","tone","desc","furColor");
 	}
 }
 }

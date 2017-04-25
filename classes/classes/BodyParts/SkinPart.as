@@ -25,11 +25,9 @@ public class SkinPart extends BasicBodyPart {
 	}
 	public function SkinPart(creature:Creature) {
 		super(creature, SKIN_TYPE_PLAIN);
+		addPublicPrimitives("modAdj","modColor");
 	}
 
-	override protected function myPublicPrimitives():Array {
-		return super.myPublicPrimitives().concat("modAdj","modColor");
-	}
 	override public function saveToObject():Object {
 		var o:Object = super.saveToObject();
 		o.modAdj = modAdj;

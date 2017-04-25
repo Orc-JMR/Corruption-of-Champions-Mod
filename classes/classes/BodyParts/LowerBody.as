@@ -56,15 +56,12 @@ public class LowerBody extends BasicBodyPart{
 	}
 	public function LowerBody(creature:Creature) {
 		super(creature,LOWER_BODY_TYPE_HUMAN);
+		addPublicPrimitives("legCount");
 	}
 
 	override public function restore(keepColor:Boolean = true):void {
 		super.restore(keepColor);
 		legCount = 2;
-	}
-
-	override protected function myPublicPrimitives():Array {
-		return super.myPublicPrimitives().concat("legCount");
 	}
 }
 }

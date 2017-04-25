@@ -21,13 +21,11 @@ public class BasicBodyPart extends BodyPart {
 	}
 	public function BasicBodyPart(creature:Creature, restoreToType:int) {
 		super(creature);
+		addPublicPrimitives("type");
 		this.creature       = creature;
 		this._restoreToType = restoreToType;
 	}
 
-	override protected function myPublicPrimitives(): Array {
-		return ["type"];
-	}
 	override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
 		super.loadFromObject(o, ignoreErrors);
 		// Upgrade old saves

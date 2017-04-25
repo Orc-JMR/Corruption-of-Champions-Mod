@@ -3,33 +3,33 @@
  */
 package classes.internals {
 public class SimpleJsonable implements Jsonable{
+	protected const myPublicPrimitives: Array = [];
+	protected const myPublicJsonables: Array = [];
 	/**
 	 * @see Utils.copyObject
 	 * Short version: names of !public! !primitive!-typed properties that should be saved/loaded
 	 */
-	protected function myPublicPrimitives(): Array {
-		return [];
+	protected function addPublicPrimitives(...args:Array): void {
+		myPublicPrimitives.push.apply(myPublicPrimitives,args);
 	}
 	/**
 	 * @return names of !public! !Jsonable!-typed properties that should be saved/loaded
 	 */
-	protected function myPublicJsonables():Array {
-		return [];
+	protected function addPublicJsonable(arg:Jsonable):void {
+		myPublicJsonables.push(arg);
 	}
 	public function saveToObject():Object {
 		var o:* = {};
-		const primitives:Array = myPublicPrimitives();
-		if (primitives.length > 0) o = Utils.copyObjectEx(o, this, primitives, true);
-		for each (var key:String in myPublicJsonables()) {
+		if (myPublicPrimitives.length > 0) o = Utils.copyObjectEx(o, this, myPublicPrimitives, true);
+		for each (var key:String in myPublicJsonables) {
 			o[key] = (this[key] as Jsonable).saveToObject();
 		}
 		return o;
 	}
 	public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
 		if (!(o is Object) || o === null) o = {};
-		const primitives:Array = myPublicPrimitives();
-		if (primitives.length>0) Utils.copyObjectEx(this, o, primitives, false, ignoreErrors);
-		for each (var key:String in myPublicJsonables()) {
+		if (myPublicPrimitives.length>0) Utils.copyObjectEx(this, o, myPublicPrimitives, false, ignoreErrors);
+		for each (var key:String in myPublicJsonables) {
 			var v:* = o[key];
 			if (!(v is Object) || v === null) v = {};
 			try {
