@@ -6,13 +6,21 @@ import classes.Creature;
 
 public class SkinPart extends BasicBodyPart {
 	public var modAdj:String = "";
+	public var modColor:String = "";
 
+	public function get color():String {return modColor == "" ? defaultColor() : modColor;}
 	public function get adj():String {return modAdj == "" ? defaultAdj() : modAdj;}
 
-	public function defaultAdj():String {return creature.skin.adj;}
+	public function defaultColor():String {
+		return creature.skin.tone;
+	}
+	public function defaultAdj():String {
+		return creature.skin.adj;
+	}
 
 	override public function restore(keepColor:Boolean = true):void {
 		super.restore(keepColor);
+		if (!keepColor) this.modColor = "";
 		modAdj = "";
 	}
 	public function SkinPart(creature:Creature) {
@@ -20,7 +28,7 @@ public class SkinPart extends BasicBodyPart {
 	}
 
 	override protected function myPublicPrimitives():Array {
-		return super.myPublicPrimitives().concat("modAdj");
+		return super.myPublicPrimitives().concat("modAdj","modColor");
 	}
 	override public function saveToObject():Object {
 		var o:Object = super.saveToObject();

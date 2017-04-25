@@ -7,7 +7,7 @@ import classes.Creature;
 public class LowerBody extends BodyPart{
 
 	public function LowerBody(creature:Creature) {
-		super(creature, LOWER_BODY_TYPE_HUMAN);
+		super(creature);
 	}
 }
 }
