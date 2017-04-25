@@ -2216,7 +2216,7 @@
 				shallowCopy(LIGHTER_COLORS),
 				createMapFromPairs([
 					["green",        "light green"],
-					["yellow",       "yellowgreen"],
+					["yellow",       "white"],
 					["spring green", "cyan"],
 					["magenta",      "blue"],
 					["white",        "light gray"]

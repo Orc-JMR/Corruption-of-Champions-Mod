@@ -15,11 +15,10 @@ public class Skin extends BodyPart {
 	public var furColor:String = "no";
 	public var tone:String = "albino";
 	public var adj:String = "";
-	public var type:int = SKIN_TYPE_PLAIN;
 
 	public function Skin(creature:Creature) {
-		super(creature);
-		addPublicPrimitives("type","adj","tone","desc","furColor");
+		super(creature,SKIN_TYPE_PLAIN);
+		addPublicPrimitives("tone","adj","desc","furColor");
 	}
 
 	public function skinFurScales():String {

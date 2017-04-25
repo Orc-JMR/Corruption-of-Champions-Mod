@@ -6,26 +6,31 @@ import classes.Creature;
 
 public class SkinPart extends BasicBodyPart {
 	public var modAdj:String = "";
-	public var modColor:String = "";
-
-	public function get color():String {return modColor == "" ? defaultColor() : modColor;}
+	public var modDesc:String = "";
 	public function get adj():String {return modAdj == "" ? defaultAdj() : modAdj;}
+	[Deprecated(message="Consider changing modAdj field")]
+	public function set adj(value:String) {modAdj = (value == "") ? defaultAdj() : value;}
+	public function get desc():String {return modDesc == "" ? defaultAdj() : modDesc;}
+	[Deprecated(message="Consider changing modDesc field")]
+	public function set desc(value:String) {modDesc = (value == "") ? defaultDesc() : value;}
 
-	public function defaultColor():String {
+	override public function defaultColor():String {
 		return creature.skin.tone;
 	}
 	public function defaultAdj():String {
 		return creature.skin.adj;
 	}
+	public function defaultDesc():String {
+		return creature.skin.desc;
+	}
 
 	override public function restore(keepColor:Boolean = true):void {
 		super.restore(keepColor);
-		if (!keepColor) this.modColor = "";
 		modAdj = "";
 	}
 	public function SkinPart(creature:Creature) {
 		super(creature, SKIN_TYPE_PLAIN);
-		addPublicPrimitives("modAdj","modColor");
+		addPublicPrimitives("modAdj");
 	}
 
 	override public function saveToObject():Object {
@@ -35,8 +40,6 @@ public class SkinPart extends BasicBodyPart {
 	}
 	override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
 		super.loadFromObject(o, ignoreErrors);
-		// Upgrade old saves
-		if ("tone" in o && !("color" in o)) this.modColor = o.tone;
 	}
 }
 }
