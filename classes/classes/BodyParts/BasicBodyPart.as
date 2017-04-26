@@ -5,7 +5,7 @@ package classes.BodyParts {
 import classes.Creature;
 
 /**
- * Common dyeable & tfable body part superclass.
+ * Common dyeable body part superclass.
  */
 public class BasicBodyPart extends BodyPart {
 	public var modColor:String = "";
