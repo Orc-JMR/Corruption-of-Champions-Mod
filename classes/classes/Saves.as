@@ -6,8 +6,9 @@
 	import classes.GlobalFlags.kACHIEVEMENTS;
 	import classes.Scenes.Inventory;
 	import classes.Scenes.Places.TelAdre.Katherine;
+import classes.internals.SimpleJsonable;
 
-	CONFIG::AIR 
+CONFIG::AIR
 	{
 		import flash.filesystem.File;
 		import flash.filesystem.FileMode;
@@ -861,7 +862,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.thickness = player.thickness;
 		saveFile.data.tone = player.tone;
 		saveFile.data.tallness = player.tallness;
-		saveFile.data.furColor = player.furColor;
 		saveFile.data.hairColor = player.hairColor;
 		saveFile.data.hairType = player.hairType;
 		saveFile.data.gillType = player.gillType;
@@ -870,10 +870,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.beardLength = player.beardLength;
 		saveFile.data.eyeType = player.eyeType;
 		saveFile.data.beardStyle = player.beardStyle;
-		saveFile.data.skinType = player.skinType;
-		saveFile.data.skinTone = player.skinTone;
-		saveFile.data.skinDesc = player.skinDesc;
-		saveFile.data.skinAdj = player.skinAdj;
 		saveFile.data.faceType = player.faceType;
 		saveFile.data.tongueType = player.tongueType;
 		saveFile.data.earType = player.earType;
@@ -881,8 +877,10 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.antennae = player.antennae;
 		saveFile.data.horns = player.horns;
 		saveFile.data.hornType = player.hornType;
+		for each (var key:String in ["underBody","lowerBodyPart","skin"]) {
+			saveFile.data[key] = (player[key] as SimpleJsonable).saveToObject();
+		}
 		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
-		saveFile.data.underBody = player.underBody.saveToObject();
 		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		saveFile.data.clawTone = player.clawTone;
@@ -890,8 +888,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		// </mod>
 		saveFile.data.wingDesc = player.wingDesc;
 		saveFile.data.wingType = player.wingType;
-		saveFile.data.lowerBodyPart = player.lowerBodyPart.saveToObject();
-		saveFile.data.legCount = player.legCount;
 		saveFile.data.tailType = player.tailType;
 		saveFile.data.tailVenum = player.tailVenom;
 		saveFile.data.tailRecharge = player.tailRecharge;
@@ -1360,6 +1356,10 @@ public function onDataLoaded(evt:Event):void
 	//playerMenu();
 }
 
+/**
+ * Upgrade loaded saveFile.data object to most recent version
+ * so the loadGameObject can proceed without hacks
+ */
 private function unFuckSaveDataBeforeLoading(data:Object):void {
 	if (data.lowerBodyPart === undefined) {
 		if (data.legCount == undefined) {
@@ -1393,6 +1393,37 @@ private function unFuckSaveDataBeforeLoading(data:Object):void {
 			legCount: data.legCount
 		};
 	}
+	if (data.skin === undefined) {
+		//Convert from old skinDesc to new skinAdj + skinDesc!
+		var skinDesc:* = data.skinDesc;
+		var skinAdj:*  = data.skinAdj;
+		var skinType:* = data.skinType;
+		for each (var legacyAdj:String in ["smooth", "thick", "rubber", "latex", "slimey"]) {
+			if (skinDesc.indexOf(legacyAdj) != -1) {
+				skinAdj = legacyAdj;
+				if (skinType == SKIN_TYPE_FUR) {
+					skinDesc = "fur";
+				} else if (skinType == SKIN_TYPE_GOO) {
+					skinDesc = "goo";
+				} else if ([
+							   SKIN_TYPE_DRAGON_SCALES,
+							   SKIN_TYPE_FISH_SCALES,
+							   SKIN_TYPE_LIZARD_SCALES
+						   ].indexOf(skinType) >= 0) {
+					skinDesc = "scales";
+				} else {
+					skinDesc = "skin";
+				}
+			}
+		}
+		data.skin = {
+			type    : data.skinType || SKIN_TYPE_PLAIN,
+			desc    : skinDesc || "skin",
+			adj     : skinAdj || "",
+			color   : data.skinTone || "albino",
+			furColor: data.furColor || "no"
+		}
+	}
 }
 public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 {
@@ -1407,7 +1438,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 	player.slotName = slot;
 
 	var counter:Number = player.cocks.length;
-	trace("Loading save!")
+	trace("Loading save!");
 	//Initialize the save file
 	//var saveFile:Object = loader.data.readObject();
 	var saveFile:* = saveData;
@@ -1686,10 +1717,6 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			player.thickness = saveFile.data.thickness;
 		
 		player.tallness = saveFile.data.tallness;
-		if (saveFile.data.furColor == undefined || saveFile.data.furColor == "no")
-			player.furColor = saveFile.data.hairColor;
-		else
-			player.furColor = saveFile.data.furColor;
 		player.hairColor = saveFile.data.hairColor;
 		if (saveFile.data.hairType == undefined)
 			player.hairType = 0;
@@ -1706,80 +1733,8 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		else
 			player.armType = saveFile.data.armType;
 		player.hairLength = saveFile.data.hairLength;
-		player.skinType = saveFile.data.skinType;
-		if (saveFile.data.skinAdj == undefined)
-			player.skinAdj = "";
-		else
-			player.skinAdj = saveFile.data.skinAdj;
-		player.skinTone = saveFile.data.skinTone;
-		player.skinDesc = saveFile.data.skinDesc;
-		//Silently discard SKIN_TYPE_UNDEFINED
-		if (player.skinType == SKIN_TYPE_UNDEFINED)
-		{
-			player.skinAdj = "";
-			player.skinDesc = "skin";
-			player.skinType = SKIN_TYPE_PLAIN;
-		}
-		//Convert from old skinDesc to new skinAdj + skinDesc!
-		if (player.skinDesc.indexOf("smooth") != -1)
-		{
-			player.skinAdj = "smooth";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("thick") != -1)
-		{
-			player.skinAdj = "thick";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("rubber") != -1)
-		{
-			player.skinAdj = "rubber";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("latex") != -1)
-		{
-			player.skinAdj = "latex";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("slimey") != -1)
-		{
-			player.skinAdj = "slimey";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
+		for each (var key:String in ["underBody","lowerBodyPart","skin"]) {
+			(player[key] as SimpleJsonable).loadFromObject(saveFile.data[key],true);
 		}
 		player.faceType = saveFile.data.faceType;
 		if (saveFile.data.tongueType == undefined)

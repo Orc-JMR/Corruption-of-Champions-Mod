@@ -8,26 +8,16 @@ import classes.internals.SimpleJsonable;
 	 * @since December 31, 2016
 	 * @author Stadler76
 	 */
-	public class UnderBody extends SimpleJsonable
+	public class UnderBody extends BodyPart
 	{
 		include "../../../includes/appearanceDefs.as";
 
-		public var type:Number = UNDER_BODY_TYPE_NONE;
 		public var skin:Skin;
 
-		private var _creature:Creature;
-
-
-	override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
-		this.restore(false);
-		super.loadFromObject(o, ignoreErrors);
-	}
-
-	public function UnderBody(creature:Creature)
+		public function UnderBody(creature:Creature)
 		{
-			_creature = creature;
-			this.skin = new Skin(_creature);
-			addPublicPrimitives("type");
+			super(creature,UNDER_BODY_TYPE_NONE);
+			this.skin = new Skin(creature);
 			addPublicJsonable(skin);
 		}
 
@@ -35,13 +25,13 @@ import classes.internals.SimpleJsonable;
 
 		public function copySkin(p:Object = null):void
 		{
-			skin.setProps(_creature.skin);
+			skin.setProps(creature.skin);
 			if (p != null) skin.setProps(p);
 		}
 
-		public function restore(keepTone:Boolean = true):void
+		override public function restore(keepTone:Boolean = true):void
 		{
-			type  = UNDER_BODY_TYPE_NONE;
+			super.restore(keepTone);
 			skin.restore(keepTone);
 		}
 
