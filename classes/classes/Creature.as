@@ -1,6 +1,7 @@
 ﻿//CoC Creature.as
 package classes
 {
+import classes.BodyParts.Claws;
 import classes.BodyParts.LowerBody;
 import classes.BodyParts.Skin;
 	import classes.BodyParts.UnderBody;
@@ -218,8 +219,11 @@ import classes.BodyParts.Skin;
 		public var faceType:Number = FACE_HUMAN;
 
 		// <mod name="Predator arms" author="Stadler76">
-		public var clawTone:String = "";
-		public var clawType:Number = CLAW_TYPE_NORMAL;
+		public var clawsPart:Claws;
+		public function get clawTone():String { return this.clawsPart.tone; }
+		public function set clawTone(value:String):void { this.clawsPart.tone = value; }
+		public function get clawType():int{ return this.clawsPart.type ; }
+		public function set clawType(value:int):void { this.clawsPart.type = value; }
 		// </mod>
 		public var underBody:UnderBody;
 
@@ -270,27 +274,7 @@ import classes.BodyParts.Skin;
 		public function get wingType():Number { return _wingType; }
 		public function set wingType(value:Number):void { _wingType = value; }
 
-		/* lowerBody:
-		0 - normal
-		1 - hooves
-		2 - paws
-		3 - snakelike body
-		4 - centaur!
-		5 - demonic heels
-		6 - demon foot-claws
-		7 - bee legs
-		8 - goo mound
-		9 - catfeet
-		10 - lizardfeet
-		11 - MLP.
-		12 - DAH BUNNY!
-		13 - Harpah Legz
-		14 - Roo feet!
-		15 - Spider Legz
-		16 - Drider Legs
-		17 - foxpaws
-		18 - dragonfeet
-		19 - raccoonfeet*/
+		/* lowerBody: see LOWER_BODY_TYPE_ */
 		public function get lowerBody():int { return lowerBodyPart.type; }
 		public function set lowerBody(value:int):void { lowerBodyPart.type = value; }
 		public var lowerBodyPart:LowerBody;
@@ -2680,232 +2664,22 @@ import classes.BodyParts.Skin;
 		public function skinFurScales():String { return skin.skinFurScales(); }
 
 		// <mod name="Predator arms" author="Stadler76">
-		public function claws():String
-		{
-			var toneText:String = clawTone == "" ? " " : (", " + clawTone + " ");
-
-			switch (clawType) {
-				case CLAW_TYPE_NORMAL: return "fingernails";
-				case CLAW_TYPE_LIZARD: return "short curved" + toneText + "claws";
-				case CLAW_TYPE_DRAGON: return "powerful, thick curved" + toneText + "claws";
-				// Since mander arms are hardcoded and the others are NYI, we're done here for now
-			}
-			return "fingernails";
-		}
+		public function claws():String { return clawsPart.describe({}); }
 		// </mod>
 
 		public function leg():String
 		{
-			var select:Number = 0;
-			//lowerBody:
-			//0 - normal
-			if (lowerBody == 0)
-				return "leg";
-			//1 - hooves
-			if (lowerBody == 1)
-				return "leg";
-			//2 - paws
-			if (lowerBody == 2)
-				return "leg";
-			//3 - snakelike body
-			if (lowerBody == 3)
-				return "snake-tail";
-			//4 - centaur!
-			if (lowerBody == 4)
-				return "equine leg";
-			//8 - goo shit
-			if (lowerBody == 8)
-				return "mound of goo";
-			//PONY
-			if (lowerBody == 11)
-				return "cartoonish pony-leg";
-			//BUNNAH
-			if (lowerBody == 12) {
-				select = Math.random() * (5);
-				if (select == 0)
-					return "fuzzy, bunny leg";
-				else if (select == 1)
-					return "fur-covered leg";
-				else if (select == 2)
-					return "furry leg";
-				else
-					return "leg";
-			}
-			if (lowerBody == 13) {
-				select = Math.floor(Math.random() * (5));
-				if (select == 0)
-					return "bird-like leg";
-				else if (select == 1)
-					return "feathered leg";
-				else
-					return "leg";
-			}
-			if (lowerBody == 17) {
-				select = Math.floor(Math.random() * (4));
-				if (select == 0)
-					return "fox-like leg";
-				else if (select == 1)
-					return "leg";
-				else if (select == 2)
-					return "leg";
-				else
-					return "vulpine leg";
-			}
-			if (lowerBody == 19) {
-				select = Math.floor(Math.random() * (4));
-				if (select == 0)
-					return "raccoon-like leg";
-				else
-					return "leg";
-			}
-			return "leg";
+			return lowerBodyPart.leg();
 		}
 
 		public function feet():String
 		{
-			var select:Number = 0;
-			//lowerBody:
-			//0 - normal
-			if (lowerBody == 0)
-				return "feet";
-			//1 - hooves
-			if (lowerBody == 1)
-				return "hooves";
-			//2 - paws
-			if (lowerBody == 2)
-				return "paws";
-			//3 - snakelike body
-			if (lowerBody == 3)
-				return "coils";
-			//4 - centaur!
-			if (lowerBody == 4)
-				return "hooves";
-			//5 - demonic heels
-			if (lowerBody == 5)
-				return "demonic high-heels";
-			//6 - demonic claws
-			if (lowerBody == 6)
-				return "demonic foot-claws";
-			//8 - goo shit
-			if (lowerBody == 8)
-				return "slimey cillia";
-			if (lowerBody == 11)
-				return "flat pony-feet";
-			//BUNNAH
-			if (lowerBody == 12) {
-				select = rand(5);
-				if (select == 0)
-					return "large bunny feet";
-				else if (select == 1)
-					return "rabbit feet";
-				else if (select == 2)
-					return "large feet";
-				else
-					return "feet";
-			}
-			if (lowerBody == 13) {
-				select = Math.floor(Math.random() * (5));
-				if (select == 0)
-					return "taloned feet";
-				else
-					return "feet";
-			}
-			if (lowerBody == 14)
-				return "foot-paws";
-			if (lowerBody == 17) {
-				select = rand(4);
-				if (select == 0)
-					return "paws";
-				else if (select == 1)
-					return "soft, padded paws";
-				else if (select == 2)
-					return "fox-like feet";
-				else
-					return "paws";
-			}
-			if (lowerBody == 19) {
-				select = Math.floor(Math.random() * (3));
-				if (select == 0)
-					return "raccoon-like feet";
-				else if (select == 1)
-					return "long-toed paws";
-				else if (select == 2)
-					return "feet";
-				else
-					return "paws";
-			}
-			return "feet";
+			return lowerBodyPart.feet();
 		}
 
 		public function foot():String
 		{
-			var select:Number = 0;
-			//lowerBody:
-			//0 - normal
-			if (lowerBody == 0)
-				return "foot";
-			//1 - hooves
-			if (lowerBody == 1)
-				return "hoof";
-			//2 - paws
-			if (lowerBody == 2)
-				return "paw";
-			//3 - snakelike body
-			if (lowerBody == 3)
-				return "coiled tail";
-			//4 - centaur!
-			if (lowerBody == 4)
-				return "hoof";
-			//8 - goo shit
-			if (lowerBody == 8)
-				return "slimey undercarriage";
-			//PONY
-			if (lowerBody == 11)
-				return "flat pony-foot";
-			//BUNNAH
-			if (lowerBody == 12) {
-				select = Math.random() * (5);
-				if (select == 0)
-					return "large bunny foot";
-				else if (select == 1)
-					return "rabbit foot";
-				else if (select == 2)
-					return "large foot";
-				else
-					return "foot";
-			}
-			if (lowerBody == 13) {
-				select = Math.floor(Math.random() * (5));
-				if (select == 0)
-					return "taloned foot";
-				else
-					return "foot";
-			}
-			if (lowerBody == 17) {
-				select = Math.floor(Math.random() * (4));
-				if (select == 0)
-					return "paw";
-				else if (select == 1)
-					return "soft, padded paw";
-				else if (select == 2)
-					return "fox-like foot";
-				else
-					return "paw";
-			}
-			if (lowerBody == 14)
-				return "foot-paw";
-			if (lowerBody == 19) {
-				select = Math.floor(Math.random() * (3));
-				if (select == 0)
-					return "raccoon-like foot";
-				else if (select == 1)
-					return "long-toed paw";
-				else if (select == 2)
-					return "foot";
-				else
-					return "paw";
-			}
-			return "foot";
+			return lowerBodyPart.foot();
 		}
 
 		public function canOvipositSpider():Boolean

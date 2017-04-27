@@ -17,7 +17,7 @@ public class Skin extends BodyPart {
 	public var adj:String = "";
 
 	public function Skin(creature:Creature) {
-		super(creature,SKIN_TYPE_PLAIN);
+		super(creature);
 		addPublicPrimitives("tone","adj","desc","furColor");
 	}
 
@@ -33,19 +33,24 @@ public class Skin extends BodyPart {
 		return skinzilla + " " + desc;
 	}
 
-	public function description(noAdj:Boolean = false, noTone:Boolean = false):String {
+
+	override public function describe(options:Object):String {
 		var skinzilla:String = "";
 
 		//Adjectives first!
-		if (!noAdj && adj != "" && !noTone && tone != "rough gray")
-			skinzilla += adj + ", ";
-		if (!noTone)
+		if (!options.noTone) {
+			if (adj != "" && !options.noTone && tone != "rough gray")
+				skinzilla += adj + ", ";
 			skinzilla += tone + " ";
+		}
 
 		//Fur handled a little differently since it uses haircolor
 		skinzilla += hasFur() ? "skin" : desc;
 
 		return skinzilla;
+	}
+	public function description(noAdj:Boolean = false, noTone:Boolean = false):String {
+		return describe({noAdj:noAdj,noTone:noTone});
 	}
 
 	public function hasFur():Boolean {

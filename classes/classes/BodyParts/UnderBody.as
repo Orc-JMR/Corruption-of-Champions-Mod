@@ -16,7 +16,7 @@ import classes.internals.SimpleJsonable;
 
 		public function UnderBody(creature:Creature)
 		{
-			super(creature,UNDER_BODY_TYPE_NONE);
+			super(creature);
 			this.skin = new Skin(creature);
 			addPublicJsonable(skin);
 		}
