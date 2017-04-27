@@ -369,7 +369,7 @@ import classes.BodyParts.Skin;
 		//MALE STUFF
 		//public var cocks:Array;
 		//TODO: Tuck away into Male genital class?
-		public var cocks:Array;
+		public var cocks:/*Cock*/Array;
 		//balls
 		public var balls:Number = 0;
 		public var cumMultiplier:Number = 1;
@@ -892,9 +892,7 @@ import classes.BodyParts.Skin;
 			return -1;
 		}
 
-		/**
-		 * @deprecated Replace with indexOfStatusEffect(), statusEffectByType(), or hasStatusEffect()
-		 */
+		[Deprecated(replacement="indexOfStatusEffect(), statusEffectByType(), or hasStatusEffect() instead")]
 		public function findStatusEffect(stype:StatusEffectType):int {
 			return indexOfStatusEffect(stype);
 		}
@@ -2072,7 +2070,7 @@ import classes.BodyParts.Skin;
 			return false
 		}
 		
-		// Deprecated
+		[Deprecated]
 		public function hasSock(arg:String = ""):Boolean
 		{
 			var index:int = cocks.length;
@@ -2263,6 +2261,22 @@ import classes.BodyParts.Skin;
 		public function isGenderless():Boolean
 		{
 			return gender == GENDER_NONE;
+		}
+
+		/**
+		 * Checks if the creature is technically male or herm: has at least a cock.
+		 */
+		public function isMaleOrHerm():Boolean
+		{
+			return (gender & GENDER_MALE) != 0;
+		}
+
+		/**
+		 * Checks if the creature is technically female or herm: has at least a vagina.
+		 */
+		public function isFemaleOrHerm():Boolean
+		{
+			return (gender & GENDER_FEMALE) != 0;
 		}
 		
 		//Create a cock. Default type is HUMAN
