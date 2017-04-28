@@ -891,9 +891,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 
 		saveFile.data.wingDesc = player.wingDesc;
 		saveFile.data.wingType = player.wingType;
-		saveFile.data.tailType = player.tailType;
-		saveFile.data.tailVenum = player.tailVenom;
-		saveFile.data.tailRecharge = player.tailRecharge;
 		saveFile.data.hipRating = player.hipRating;
 		saveFile.data.buttRating = player.buttRating;
 		
@@ -1438,6 +1435,15 @@ private function unFuckSaveDataBeforeLoading(data:Object):void {
 			type: data.faceType
 		}
 	}
+	if (data.tail === undefined) {
+		var venomAsCount:Boolean = data.tailType == TAIL_TYPE_FOX;
+		data.tail = {
+			type    : data.tailType,
+			venom   : venomAsCount ? 0 : data.tailVenum,
+			recharge: data.tailRecharge,
+			count   : (data.tailType == 0) ? 0 : venomAsCount ? data.tailVenum : 1
+		}
+	}
 }
 public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 {
@@ -1756,6 +1762,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		player.skin.loadFromObject(data.skin,true);
 		player.clawsPart.loadFromObject(data.clawsPart,true);
 		player.facePart.loadFromObject(data.faceType,true);
+		player.tail.loadFromObject(saveFile.data.tail,true);
 		if (saveFile.data.tongueType == undefined)
 			player.tongueType = TONGUE_HUMAN;
 		else
@@ -1780,10 +1787,6 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 
 		player.wingDesc = saveFile.data.wingDesc;
 		player.wingType = saveFile.data.wingType;
-		player.lowerBodyPart.loadFromObject(saveFile.data.lowerBody,true);
-		player.tailType = saveFile.data.tailType;
-		player.tailVenom = saveFile.data.tailVenum;
-		player.tailRecharge = saveFile.data.tailRecharge;
 		player.hipRating = saveFile.data.hipRating;
 		player.buttRating = saveFile.data.buttRating;
 

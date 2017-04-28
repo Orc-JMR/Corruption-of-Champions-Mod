@@ -234,7 +234,7 @@ package classes {
 				needNext = true;
 			}
 			if ((player.findPerk(PerkLib.EnlightenedNinetails) >= 0 && player.perkv4(PerkLib.EnlightenedNinetails) == 0) || (player.findPerk(PerkLib.CorruptedNinetails) >= 0 && player.perkv4(PerkLib.CorruptedNinetails) == 0)) { //Check ninetails perks!
-				if (player.tailType != TAIL_TYPE_FOX || player.tailVenom < 9) {
+				if (player.tailType != TAIL_TYPE_FOX || player.tailCount < 9) {
 					outputText("\n<b>Without your tails, the magic power they once granted withers and dies, vanishing completely.</b>\n");
 					if (player.perkv4(PerkLib.EnlightenedNinetails) == 0) player.removePerk(PerkLib.EnlightenedNinetails);
 					if (player.perkv4(PerkLib.CorruptedNinetails) == 0) player.removePerk(PerkLib.CorruptedNinetails);

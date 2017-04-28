@@ -752,9 +752,9 @@ package classes
 			}
 			else if (player.tailType == TAIL_TYPE_FOX) 
 			{
-				if (player.tailVenom <= 1) 
+				if (player.tailCount <= 1)
 					outputText("  A swishing " + player.furColor + " fox's brush extends from your " + player.assDescript() + ", curling around your body - the soft fur feels lovely.");
-				else outputText("  " + Num2Text(player.tailVenom) + " swishing " + player.furColor + " fox's tails extend from your " + player.assDescript() + ", curling around your body - the soft fur feels lovely.");
+				else outputText("  " + Num2Text(player.tailCount) + " swishing " + player.furColor + " fox's tails extend from your " + player.assDescript() + ", curling around your body - the soft fur feels lovely.");
 			}
 			else if (player.tailType == TAIL_TYPE_DRACONIC) 
 			{
