@@ -232,8 +232,75 @@ import classes.GlobalFlags.kFLAGS;
 		
 		public function hasBeard():Boolean{ return facePart.hasBeard(); }
 		public function beard():String{ return facePart.beard(); }
-		public function hasMuzzle():Boolean{ return facePart.hasMuzzle(); }
-		public function face():String { return facePart.describe({}); }
+	public function hasMuzzle():Boolean
+	{
+		if (faceType == FACE_HORSE || faceType == FACE_DOG || faceType == FACE_CAT || faceType == FACE_LIZARD || faceType == FACE_KANGAROO || faceType == FACE_FOX || faceType == FACE_DRAGON || faceType == FACE_RHINO || faceType == FACE_ECHIDNA || faceType == FACE_DEER || faceType == FACE_WOLF)
+			return true;
+		return false;
+	}
+	public function face():String
+	{
+		var stringo:String = "";
+		//0 - human
+		//5 - Human w/Naga fangz
+		//8 - bunnah faceahhh bunbun
+		//10 - spidah-face (humanish)
+		if (faceType == 0)
+			return "face";
+		//1 - horse
+		//2 - dogface
+		//6 - kittah face
+		//7 - lizard face (durned argonians!)
+		//9 - kangaface
+		if (hasMuzzle())
+		{
+			if (int(Math.random() * 3) == 0 && faceType == FACE_HORSE)
+				stringo = "long ";
+			if (int(Math.random() * 3) == 0 && faceType == FACE_CAT)
+				stringo = "feline ";
+			if (int(Math.random() * 3) == 0 && faceType == FACE_RHINO)
+				stringo = "rhino ";
+			if (int(Math.random() * 3) == 0 && (faceType == FACE_LIZARD || faceType == FACE_DRAGON))
+				stringo = "reptilian ";
+			if (int(Math.random() * 3) == 0 && faceType == FACE_WOLF)
+				stringo = "canine ";
+			switch(rand(3)) {
+				case 0:
+					return stringo + "muzzle";
+				case 1:
+					return stringo + "snout";
+				case 2:
+					return stringo + "face";
+				default:
+					return stringo + "face";
+			}
+		}
+		//3 - cowface
+		if (faceType == FACE_COW_MINOTAUR)
+		{
+			if (Math.floor(Math.random() * 4) == 0)
+				stringo = "bovine ";
+			if (int(Math.random() * 2) == 0)
+				return "muzzle";
+			return stringo + "face";
+		}
+		//4 - sharkface-teeth
+		if (faceType == FACE_SHARK_TEETH)
+		{
+			if (Math.floor(Math.random() * 4) == 0)
+				stringo = "angular ";
+			return stringo + "face";
+		}
+		if (faceType == FACE_PIG || faceType == FACE_BOAR)
+		{
+			if (Math.floor(Math.random() * 4) == 0)
+				stringo = (faceType == FACE_PIG ? "pig" : "boar") + "-like ";
+			if (Math.floor(Math.random() * 4) == 0)
+				return stringo + "snout";
+			return stringo + "face";
+		}
+		return "face";
+	}
 		public function faceDesc():String { return facePart.describe({withFem:true}); }
 		public function hasLongTail():Boolean { return tail.isLong(); }
 

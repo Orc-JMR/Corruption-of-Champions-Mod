@@ -1938,6 +1938,11 @@ import classes.BodyParts.UnderBody;
 			return countCocksOfType(CockTypesEnum.DOG) + countCocksOfType(CockTypesEnum.FOX);
 		}
 		
+		public function wolfCocks():int {
+			if (cocks.length == 0) return 0;
+			return countCocksOfType(CockTypesEnum.WOLF);
+		}
+		
 		public function findFirstCockType(ctype:CockTypesEnum):Number
 		{
 			var index:Number = 0;
@@ -1982,6 +1987,12 @@ import classes.BodyParts.UnderBody;
 				}
 				//Dog - > horse
 				if (cocks[counter].cockType == CockTypesEnum.DOG)
+				{
+					cocks[counter].cockType = CockTypesEnum.HORSE;
+					return counter;
+				}
+				//Wolf - > horse
+				if (cocks[counter].cockType == CockTypesEnum.WOLF)
 				{
 					cocks[counter].cockType = CockTypesEnum.HORSE;
 					return counter;
@@ -2848,6 +2859,7 @@ import classes.BodyParts.UnderBody;
 			}
 			switch (cocks[0].cockType) { //With multiple cocks only use the descriptions for specific cock types if all cocks are of a single type
 				case CockTypesEnum.ANEMONE:
+				case CockTypesEnum.WOLF:
 				case CockTypesEnum.CAT:
 				case CockTypesEnum.DEMON:
 				case CockTypesEnum.DISPLACER:
@@ -2874,6 +2886,7 @@ import classes.BodyParts.UnderBody;
 					case CockTypesEnum.CAT:
 					case CockTypesEnum.DISPLACER:
 					case CockTypesEnum.DOG:
+					case CockTypesEnum.WOLF:
 					case CockTypesEnum.FOX:
 					case CockTypesEnum.HORSE:
 					case CockTypesEnum.KANGAROO:
@@ -2956,6 +2969,7 @@ import classes.BodyParts.UnderBody;
 						default: return "bizarre head";
 					}
 				case CockTypesEnum.DOG:
+				case CockTypesEnum.WOLF:
 				case CockTypesEnum.FOX:
 					if (rand(2) == 0) return "pointed tip";
 					return "narrow tip";
