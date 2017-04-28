@@ -247,6 +247,10 @@ public class Utils extends Object
 		{
 			return int(Math.random() * max);
 		}
+		public static function trueOnceInN(n:int):Boolean
+		{
+			return rand(n) == 0;
+		}
 		
 		public static function validateNonNegativeNumberFields(o:Object, func:String, nnf:Array):String
 		{

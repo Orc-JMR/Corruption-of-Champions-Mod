@@ -277,5 +277,105 @@ public class LowerBody extends BodyPart{
 		}
 		return "foot";
 	}
+	public function isDrider():Boolean {
+		return (type == LOWER_BODY_TYPE_DRIDER_LOWER_BODY);
+	}
+	public function isGoo():Boolean
+	{
+		return type == LOWER_BODY_TYPE_GOO;
+	}
+	public function isBiped():Boolean
+	{
+		return legCount == 2;
+	}
+
+	public function isNaga():Boolean
+	{
+		return type == LOWER_BODY_TYPE_NAGA;
+
+	}
+
+	public function isTaur():Boolean
+	{
+		// driders have genitals on their human part, inlike usual taurs... this is actually bad way to check, but too many places to fix just now
+		return legCount > 2 && !isDrider();
+
+	}
+	public function legs():String
+	{
+		var select:Number = 0;
+		//lowerBody:
+		//4 legs - centaur!
+		if (isDrider())
+			return Utils.num2Text(legCount)+" spider legs";
+		if (isTaur())
+			return Utils.num2Text(legCount)+" legs";
+
+		switch(type) {
+			case LOWER_BODY_TYPE_HUMAN:
+				return "legs";
+			case LOWER_BODY_TYPE_HOOFED:
+				return "legs";
+			case LOWER_BODY_TYPE_DOG:
+				return "legs";
+			case LOWER_BODY_TYPE_NAGA:
+				return "snake-like coils";
+			case LOWER_BODY_TYPE_GOO:
+				return "mounds of goo";
+			case LOWER_BODY_TYPE_PONY:
+				return "cute pony-legs";
+			case LOWER_BODY_TYPE_BUNNY: {
+				select = Math.floor(Math.random() * (5));
+				if (select == 0)
+					return "fuzzy, bunny legs";
+				else if (select == 1)
+					return "fur-covered legs";
+				else if (select == 2)
+					return "furry legs";
+				else
+					return "legs";
+			}
+			case LOWER_BODY_TYPE_HARPY: {
+				select = Math.floor(Math.random() * (5));
+				if (select == 0)
+					return "bird-like legs";
+				else if (select == 1)
+					return "feathered legs";
+				else
+					return "legs";
+			}
+			case LOWER_BODY_TYPE_FOX: {
+				select = Math.floor(Math.random() * (4));
+				if (select == 0)
+					return "fox-like legs";
+				else if (select == 1)
+					return "legs";
+				else if (select == 2)
+					return "legs";
+				else
+					return "vulpine legs";
+			}
+			case LOWER_BODY_TYPE_RACCOON: {
+				select = Math.floor(Math.random() * (4));
+				if (select == 0)
+					return "raccoon-like legs";
+				else
+					return "legs";
+			}
+			case LOWER_BODY_TYPE_CLOVEN_HOOFED: {
+				select = Math.floor(Math.random() * (4));
+				if (select == 0)
+					return "pig-like legs";
+				else if (select == 1)
+					return "legs";
+				else if (select == 2)
+					return "legs";
+				else
+					return "swine legs";
+			}
+			default:
+				return "legs";
+		}
+	}
 }
 }

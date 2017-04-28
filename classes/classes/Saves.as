@@ -870,7 +870,6 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.beardLength = player.beardLength;
 		saveFile.data.eyeType = player.eyeType;
 		saveFile.data.beardStyle = player.beardStyle;
-		saveFile.data.faceType = player.faceType;
 		saveFile.data.tongueType = player.tongueType;
 		saveFile.data.earType = player.earType;
 		saveFile.data.earValue = player.earValue;
@@ -880,6 +879,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		/*for each (var key:String in ["underBody","lowerBodyPart","skin","clawsPart"]) {
 			saveFile.data[key] = (player[key] as SimpleJsonable).saveToObject();
 		}*/
+		saveFile.data.face = player.facePart.saveToObject();
 		saveFile.data.underBody = player.underBody.saveToObject();
 		saveFile.data.lowerBodyPart = player.lowerBodyPart.saveToObject();
 		saveFile.data.skin = player.skin.saveToObject();
@@ -1429,6 +1429,11 @@ private function unFuckSaveDataBeforeLoading(data:Object):void {
 			clawType: data.clawTone|0
 		}
 	}
+	if (data.facePart === undefined) {
+		data.facePart = {
+			type: data.faceType
+		}
+	}
 }
 public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 {
@@ -1477,27 +1482,28 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		}
 		unFuckSaveDataBeforeLoading(saveFile.data);
 		//PIERCINGS
-		
-		//trace("LOADING PIERCINGS");
-		player.nipplesPierced = saveFile.data.nipplesPierced;
-		player.nipplesPShort = saveFile.data.nipplesPShort;
-		player.nipplesPLong = saveFile.data.nipplesPLong;
-		player.lipPierced = saveFile.data.lipPierced;
-		player.lipPShort = saveFile.data.lipPShort;
-		player.lipPLong = saveFile.data.lipPLong;
-		player.tonguePierced = saveFile.data.tonguePierced;
-		player.tonguePShort = saveFile.data.tonguePShort;
-		player.tonguePLong = saveFile.data.tonguePLong;
-		player.eyebrowPierced = saveFile.data.eyebrowPierced;
-		player.eyebrowPShort = saveFile.data.eyebrowPShort;
-		player.eyebrowPLong = saveFile.data.eyebrowPLong;
-		player.earsPierced = saveFile.data.earsPierced;
-		player.earsPShort = saveFile.data.earsPShort;
-		player.earsPLong = saveFile.data.earsPLong;
-		player.nosePierced = saveFile.data.nosePierced;
-		player.nosePShort = saveFile.data.nosePShort;
-		player.nosePLong = saveFile.data.nosePLong;
-		
+
+		{ // piercings
+			//trace("LOADING PIERCINGS");
+			player.nipplesPierced = saveFile.data.nipplesPierced;
+			player.nipplesPShort  = saveFile.data.nipplesPShort;
+			player.nipplesPLong   = saveFile.data.nipplesPLong;
+			player.lipPierced     = saveFile.data.lipPierced;
+			player.lipPShort      = saveFile.data.lipPShort;
+			player.lipPLong       = saveFile.data.lipPLong;
+			player.tonguePierced  = saveFile.data.tonguePierced;
+			player.tonguePShort   = saveFile.data.tonguePShort;
+			player.tonguePLong    = saveFile.data.tonguePLong;
+			player.eyebrowPierced = saveFile.data.eyebrowPierced;
+			player.eyebrowPShort  = saveFile.data.eyebrowPShort;
+			player.eyebrowPLong   = saveFile.data.eyebrowPLong;
+			player.earsPierced    = saveFile.data.earsPierced;
+			player.earsPShort     = saveFile.data.earsPShort;
+			player.earsPLong      = saveFile.data.earsPLong;
+			player.nosePierced    = saveFile.data.nosePierced;
+			player.nosePShort     = saveFile.data.nosePShort;
+			player.nosePLong      = saveFile.data.nosePLong;
+		} // piercings
 		//MAIN STATS
 		player.str = saveFile.data.str;
 		player.tou = saveFile.data.tou;
@@ -1746,7 +1752,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		player.lowerBodyPart.loadFromObject(data.lowerBodyPart,true);
 		player.skin.loadFromObject(data.skin,true);
 		player.clawsPart.loadFromObject(data.clawsPart,true);
-		player.faceType = saveFile.data.faceType;
+		player.facePart.loadFromObject(data.faceType;
 		if (saveFile.data.tongueType == undefined)
 			player.tongueType = TONGUE_HUMAN;
 		else

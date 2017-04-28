@@ -30,6 +30,7 @@ public class BodyPart extends SimpleJsonable {
 	/**
 	 * Should be implemented in subclasses.
 	 * @param options A part-dependent option set, for example {noAdj:true,noTone:true}
+	 * Unless overriden by options, should return noun phrase
 	 */
 	public function describe(options:Object):String {
 		CoC_Settings.errorAMC("BodyPart","describe");
