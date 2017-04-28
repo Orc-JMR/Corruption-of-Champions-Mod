@@ -2493,15 +2493,15 @@ import classes.BodyParts.UnderBody;
 			return (bonusFertility() + fertility);
 		}
 
-		public function hasScales():Boolean
-		public function hasReptileScales():Boolean
-		public function hasDragonScales():Boolean
-		public function hasLizardScales():Boolean
-		public function hasNonLizardScales():Boolean
-		public function hasFurOrScales():Boolean
-		public function hasFur():Boolean
-		public function hasPlainSkin():Boolean
-		public function hasGooSkin():Boolean
+		public function hasScales():Boolean { return skin.hasScales(); }
+		public function hasReptileScales():Boolean { return skin.hasReptileScales(); }
+		public function hasDragonScales():Boolean { return skin.hasDragonScales(); }
+		public function hasLizardScales():Boolean { return skin.hasLizardScales(); }
+		public function hasNonLizardScales():Boolean { return skin.hasNonLizardScales(); }
+		public function hasFurOrScales():Boolean { return skin.hasFurOrScales(); }
+		public function hasFur():Boolean { return skin.hasFur(); }
+		public function hasPlainSkin():Boolean { return skin.hasPlainSkin(); }
+		public function hasGooSkin():Boolean { return skin.hasGooSkin(); }
 		public function skinDescript(...args):String { return skin.description.apply(null, args); }
 
 		public function skinFurScales():String { return skin.skinFurScales(); }

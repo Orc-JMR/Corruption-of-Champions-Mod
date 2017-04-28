@@ -1,6 +1,5 @@
 package classes.BodyParts {
 import classes.Creature;
-import classes.internals.SimpleJsonable;
 import classes.internals.Utils;
 
 /**
@@ -56,7 +55,37 @@ public class Skin extends BodyPart {
 	public function hasFur():Boolean {
 		return type == SKIN_TYPE_FUR;
 	}
+	public function hasScales():Boolean {
+		return [SKIN_TYPE_LIZARD_SCALES, SKIN_TYPE_DRAGON_SCALES, SKIN_TYPE_FISH_SCALES].indexOf(type) != -1;
+	}
 
+	public function hasReptileScales():Boolean {
+		return [SKIN_TYPE_LIZARD_SCALES, SKIN_TYPE_DRAGON_SCALES].indexOf(type) != -1;
+	}
+
+	public function hasDragonScales():Boolean {
+		return type == SKIN_TYPE_DRAGON_SCALES;
+	}
+
+	public function hasLizardScales():Boolean {
+		return type == SKIN_TYPE_LIZARD_SCALES;
+	}
+
+	public function hasNonLizardScales():Boolean {
+		return hasScales() && !hasLizardScales();
+	}
+
+	public function hasFurOrScales():Boolean {
+		return hasFur() || hasScales();
+	}
+
+	public function hasGooSkin():Boolean {
+		return type == SKIN_TYPE_GOO;
+	}
+
+	public function hasPlainSkin():Boolean {
+		return type == SKIN_TYPE_PLAIN;
+	}
 	override public function restore(keepTone:Boolean = true):void {
 		super.restore(keepTone);
 		if (!keepTone) tone = "albino";

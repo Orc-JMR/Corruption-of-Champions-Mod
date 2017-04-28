@@ -1752,7 +1752,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		player.lowerBodyPart.loadFromObject(data.lowerBodyPart,true);
 		player.skin.loadFromObject(data.skin,true);
 		player.clawsPart.loadFromObject(data.clawsPart,true);
-		player.facePart.loadFromObject(data.faceType;
+		player.facePart.loadFromObject(data.faceType,true);
 		if (saveFile.data.tongueType == undefined)
 			player.tongueType = TONGUE_HUMAN;
 		else
