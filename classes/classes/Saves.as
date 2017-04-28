@@ -6,9 +6,11 @@
 	import classes.GlobalFlags.kACHIEVEMENTS;
 	import classes.Scenes.Inventory;
 	import classes.Scenes.Places.TelAdre.Katherine;
-import classes.internals.SimpleJsonable;
+	import classes.internals.SimpleJsonable;
+	import classes.internals.LoggerFactory;
+	import mx.logging.ILogger;
 
-CONFIG::AIR
+	CONFIG::AIR 
 	{
 		import flash.filesystem.File;
 		import flash.filesystem.FileMode;
@@ -30,6 +32,7 @@ CONFIG::AIR
 
 
 public class Saves extends BaseContent {
+	private static const LOGGER:ILogger = LoggerFactory.getLogger(Saves);
 
 	private static const SAVE_FILE_CURRENT_INTEGER_FORMAT_VERSION:int		= 816;
 		//Didn't want to include something like this, but an integer is safer than depending on the text version number from the CoC class.
@@ -653,8 +656,9 @@ public function savePermObject(isFile:Boolean):void {
 }
 
 public function loadPermObject():void {
-	var saveFile:* = SharedObject.getLocal("CoC_Main", "/");
-	trace("Loading achievements!")
+	var permObjectFileName:String = "CoC_Main";
+	var saveFile:* = SharedObject.getLocal(permObjectFileName, "/");
+	LOGGER.info("Loading achievements from {0}!", permObjectFileName);
 	//Initialize the save file
 	//var saveFile:Object = loader.data.readObject();
 	if (saveFile.data.exists)
@@ -697,7 +701,7 @@ public function loadPermObject():void {
 
 		if (saveFile.data.permObjVersionID != undefined) {
 			getGame().permObjVersionID = saveFile.data.permObjVersionID;
-			trace("Found internal permObjVersionID:", getGame().permObjVersionID);
+			LOGGER.debug("Found internal permObjVersionID:{0}", getGame().permObjVersionID);
 		}
 
 		if (getGame().permObjVersionID < 1039900) {
@@ -708,7 +712,7 @@ public function loadPermObject():void {
 			achievements[kACHIEVEMENTS.GENERAL_BAD_ENDER] = 0;
 			getGame().permObjVersionID = 1039900;
 			savePermObject(false);
-			trace("PermObj internal versionID updated:", getGame().permObjVersionID);
+			LOGGER.debug("PermObj internal versionID updated:{0}", getGame().permObjVersionID);
 		}
 	}
 }
@@ -1483,27 +1487,26 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		unFuckSaveDataBeforeLoading(saveFile.data);
 		//PIERCINGS
 
-		{ // piercings
-			//trace("LOADING PIERCINGS");
-			player.nipplesPierced = saveFile.data.nipplesPierced;
-			player.nipplesPShort  = saveFile.data.nipplesPShort;
-			player.nipplesPLong   = saveFile.data.nipplesPLong;
-			player.lipPierced     = saveFile.data.lipPierced;
-			player.lipPShort      = saveFile.data.lipPShort;
-			player.lipPLong       = saveFile.data.lipPLong;
-			player.tonguePierced  = saveFile.data.tonguePierced;
-			player.tonguePShort   = saveFile.data.tonguePShort;
-			player.tonguePLong    = saveFile.data.tonguePLong;
-			player.eyebrowPierced = saveFile.data.eyebrowPierced;
-			player.eyebrowPShort  = saveFile.data.eyebrowPShort;
-			player.eyebrowPLong   = saveFile.data.eyebrowPLong;
-			player.earsPierced    = saveFile.data.earsPierced;
-			player.earsPShort     = saveFile.data.earsPShort;
-			player.earsPLong      = saveFile.data.earsPLong;
-			player.nosePierced    = saveFile.data.nosePierced;
-			player.nosePShort     = saveFile.data.nosePShort;
-			player.nosePLong      = saveFile.data.nosePLong;
-		} // piercings
+		//trace("LOADING PIERCINGS");
+		player.nipplesPierced = saveFile.data.nipplesPierced;
+		player.nipplesPShort = saveFile.data.nipplesPShort;
+		player.nipplesPLong = saveFile.data.nipplesPLong;
+		player.lipPierced = saveFile.data.lipPierced;
+		player.lipPShort = saveFile.data.lipPShort;
+		player.lipPLong = saveFile.data.lipPLong;
+		player.tonguePierced = saveFile.data.tonguePierced;
+		player.tonguePShort = saveFile.data.tonguePShort;
+		player.tonguePLong = saveFile.data.tonguePLong;
+		player.eyebrowPierced = saveFile.data.eyebrowPierced;
+		player.eyebrowPShort = saveFile.data.eyebrowPShort;
+		player.eyebrowPLong = saveFile.data.eyebrowPLong;
+		player.earsPierced = saveFile.data.earsPierced;
+		player.earsPShort = saveFile.data.earsPShort;
+		player.earsPLong = saveFile.data.earsPLong;
+		player.nosePierced = saveFile.data.nosePierced;
+		player.nosePShort = saveFile.data.nosePShort;
+		player.nosePLong = saveFile.data.nosePLong;
+
 		//MAIN STATS
 		player.str = saveFile.data.str;
 		player.tou = saveFile.data.tou;

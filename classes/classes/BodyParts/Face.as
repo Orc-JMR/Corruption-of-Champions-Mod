@@ -6,30 +6,6 @@ import classes.Creature;
 import classes.internals.Utils;
 
 public class Face extends BodyPart {
-	public static const TYPE_HUMAN:int        = 0;
-	public static const TYPE_HORSE:int        = 1;
-	public static const TYPE_DOG:int          = 2;
-	public static const TYPE_COW_MINOTAUR:int = 3;
-	public static const TYPE_SHARK_TEETH:int  = 4;
-	public static const TYPE_SNAKE_FANGS:int  = 5;
-	public static const TYPE_CAT:int          = 6;
-	public static const TYPE_LIZARD:int       = 7;
-	public static const TYPE_BUNNY:int        = 8;
-	public static const TYPE_KANGAROO:int     = 9;
-	public static const TYPE_SPIDER_FANGS:int = 10;
-	public static const TYPE_FOX:int          = 11;
-	public static const TYPE_DRAGON:int       = 12;
-	public static const TYPE_RACCOON_MASK:int = 13;
-	public static const TYPE_RACCOON:int      = 14;
-	public static const TYPE_BUCKTEETH:int    = 15;
-	public static const TYPE_MOUSE:int        = 16;
-	public static const TYPE_FERRET_MASK:int  = 17;
-	public static const TYPE_FERRET:int       = 18;
-	public static const TYPE_PIG:int          = 19;
-	public static const TYPE_BOAR:int         = 20;
-	public static const TYPE_RHINO:int        = 21;
-	public static const TYPE_ECHIDNA:int      = 22;
-	public static const TYPE_DEER:int         = 23;
 
 	public function Face(creature:Creature) {
 		super(creature);
@@ -37,9 +13,10 @@ public class Face extends BodyPart {
 
 	public function hasMuzzle():Boolean {
 		return [
-					TYPE_HORSE, TYPE_DOG, TYPE_CAT, TYPE_LIZARD, TYPE_KANGAROO, TYPE_FOX, TYPE_DRAGON, TYPE_RHINO,
-					TYPE_ECHIDNA, TYPE_DEER
-				].indexOf(type) >= 0;
+				   FACE_HORSE, FACE_DOG, FACE_CAT, FACE_LIZARD, FACE_KANGAROO,
+				   FACE_FOX, FACE_DRAGON, FACE_RHINO, FACE_ECHIDNA, FACE_DEER,
+				   FACE_WOLF
+			   ].indexOf(type) >= 0;
 	}
 	public function hasBeard():Boolean {
 		return creature.beardLength > 0;
@@ -54,30 +31,31 @@ public class Face extends BodyPart {
 	}
 	public function nounPhrase():String {
 		var stringo:String = "";
-		if (type == TYPE_HUMAN) return "face";
+		if (type == FACE_HUMAN) return "face";
 		if (hasMuzzle()) {
 			if (Utils.trueOnceInN(3)) {
-				if (type == TYPE_HORSE) stringo = "long ";
-				if (type == TYPE_CAT) stringo = "feline ";
-				if (type == TYPE_RHINO) stringo = "rhino ";
-				if (type == TYPE_LIZARD
-						|| type == TYPE_DRAGON) stringo = "reptilian ";
+				if (type == FACE_HORSE) stringo = "long ";
+				if (type == FACE_CAT) stringo = "feline ";
+				if (type == FACE_RHINO) stringo = "rhino ";
+				if (type == FACE_LIZARD
+					|| type == FACE_DRAGON) stringo = "reptilian ";
+				if (type == FACE_WOLF) stringo = "canine ";
 			}
 			return stringo + Utils.randomChoice("muzzle", "snout", "face");
 		}
 		//3 - cowface
-		if (type == TYPE_COW_MINOTAUR) {
+		if (type == FACE_COW_MINOTAUR) {
 			if (Utils.trueOnceInN(4)) stringo = "bovine ";
 			return Utils.randomChoice("muzzle", stringo + "face");
 		}
 		//4 - sharkface-teeth
-		if (type == TYPE_SHARK_TEETH) {
+		if (type == FACE_SHARK_TEETH) {
 			if (Utils.trueOnceInN(4)) stringo = "angular ";
 			return stringo + "face";
 		}
-		if (type == TYPE_PIG || type == TYPE_BOAR) {
+		if (type == FACE_PIG || type == FACE_BOAR) {
 			if (Utils.trueOnceInN(4))
-				stringo = (type == TYPE_PIG ? "pig" : "boar") + "-like ";
+				stringo = (type == FACE_PIG ? "pig" : "boar") + "-like ";
 			if (Utils.trueOnceInN(4))
 				return stringo + "snout";
 			return stringo + "face";
