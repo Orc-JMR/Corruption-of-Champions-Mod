@@ -432,25 +432,25 @@ import classes.BodyParts.UnderBody;
 			return newClitLength < 0 ? 0 : newClitLength;
 		}
 		
-		private var _femininity:Number = 50;
-		public function get femininity():Number {
-			var fem:Number = _femininity;
-			const effect:StatusEffectClass = statusEffectByType(StatusEffects.UmasMassage);
-			if (effect != null && effect.value1 == UmasShop.MASSAGE_MODELLING_BONUS) {
-				fem += effect.value2;
+			private var _femininity:Number = 50;
+			public function get femininity():Number {
+				var fem:Number = _femininity;
+				const effect:StatusEffectClass = statusEffectByType(StatusEffects.UmasMassage);
+				if (effect != null && effect.value1 == UmasShop.MASSAGE_MODELLING_BONUS) {
+					fem += effect.value2;
+				}
+				if (fem > 100)
+					fem = 100;
+				return fem;
 			}
-			if (fem > 100)
-				fem = 100;
-			return fem;
-		}
-		public function set femininity(value:Number):void
-		{
-			if (value > 100)
-				value = 100;
-			else if (value < 0)
-				value = 0;
-			_femininity = value;
-		}
+			public function set femininity(value:Number):void
+			{
+				if (value > 100)
+					value = 100;
+				else if (value < 0)
+					value = 0;
+				_femininity = value;
+			}
 		
 		public function validate():String
 		{
@@ -2513,7 +2513,6 @@ import classes.BodyParts.UnderBody;
 		public function hasFur():Boolean { return skin.hasFur(); }
 		public function hasPlainSkin():Boolean { return skin.hasPlainSkin(); }
 		public function hasGooSkin():Boolean { return skin.hasGooSkin(); }
-		public function skinDescript(...args):String { return skin.description.apply(null, args); }
 
 		public function skinFurScales():String { return skin.skinFurScales(); }
 

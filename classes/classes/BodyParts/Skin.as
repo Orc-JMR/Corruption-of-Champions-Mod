@@ -48,9 +48,6 @@ public class Skin extends BodyPart {
 
 		return skinzilla;
 	}
-	public function description(noAdj:Boolean = false, noTone:Boolean = false):String {
-		return describe({noAdj:noAdj,noTone:noTone});
-	}
 
 	public function hasFur():Boolean {
 		return type == SKIN_TYPE_FUR;

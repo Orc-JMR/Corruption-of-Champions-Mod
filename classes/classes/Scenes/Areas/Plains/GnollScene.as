@@ -347,7 +347,7 @@ package classes.Scenes.Areas.Plains
 		 (decrease buttRating)
 
 		 Hyena Spot Effect #4
-		 Your muscles seem to quiver underneath your " + skinDescript() + ", growing leaner and quicker.
+		 Your muscles seem to quiver underneath your [skin], growing leaner and quicker.
 		 (increase Speed)
 
 		 Hyena Spot Effect #5
