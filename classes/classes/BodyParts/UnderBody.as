@@ -21,7 +21,7 @@ import classes.internals.SimpleJsonable;
 			addPublicJsonable(skin);
 		}
 
-		public function skinFurScales(...args):String { return skin.skinFurScales.apply(null, args); }
+		public function skinFurScales(...args):String { return skin.skinFurScales.apply(skin, args); }
 
 		public function copySkin(p:Object = null):void
 		{
