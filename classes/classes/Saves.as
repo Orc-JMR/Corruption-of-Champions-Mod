@@ -1361,7 +1361,7 @@ public function onDataLoaded(evt:Event):void
  * so the loadGameObject can proceed without hacks
  */
 private function unFuckSaveDataBeforeLoading(data:Object):void {
-	if (data.lowerBodyPart === undefined) {
+	if (typeof data.lowerBodyPart != 'object') {
 		if (data.legCount == undefined) {
 			switch (data.lowerBody) {
 				case LOWER_BODY_TYPE_DRIDER_LOWER_BODY:
@@ -1393,7 +1393,7 @@ private function unFuckSaveDataBeforeLoading(data:Object):void {
 			legCount: data.legCount
 		};
 	}
-	if (data.skin === undefined) {
+	if (typeof data.skin != 'object') {
 		//Convert from old skinDesc to new skinAdj + skinDesc!
 		var skinDesc:* = data.skinDesc;
 		var skinAdj:*  = data.skinAdj;
@@ -1424,18 +1424,18 @@ private function unFuckSaveDataBeforeLoading(data:Object):void {
 			furColor: data.furColor || "no"
 		}
 	}
-	if (data.clawPart === undefined) {
+	if (typeof data.clawPart !== "object") {
 		data.clawPart = {
 			clawTone: data.clawTone||"",
-			clawType: data.clawTone|0
+			clawType: data.clawType|0
 		}
 	}
-	if (data.facePart === undefined) {
+	if (typeof data.facePart !== "object") {
 		data.facePart = {
 			type: data.faceType
 		}
 	}
-	if (data.tail === undefined) {
+	if (typeof data.tail !== "object") {
 		var venomAsCount:Boolean = data.tailType == TAIL_TYPE_FOX;
 		data.tail = {
 			type    : data.tailType,
@@ -1443,6 +1443,9 @@ private function unFuckSaveDataBeforeLoading(data:Object):void {
 			recharge: data.tailRecharge,
 			count   : (data.tailType == 0) ? 0 : venomAsCount ? data.tailVenum : 1
 		}
+	}
+	if (typeof data.underBody !== "object") {
+		data.underBody = {};
 	}
 }
 public function loadGameObject(saveData:Object, slot:String = "VOID"):void
@@ -1757,12 +1760,12 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		/*for each (var key:String in ["underBody","lowerBodyPart","skin","clawPart"]) {
 			(player[key] as SimpleJsonable).loadFromObject(saveFile.data[key],true);
 		}*/
-		player.underBody.loadFromObject(data.underBody,true);
-		player.lowerBodyPart.loadFromObject(data.lowerBodyPart,true);
-		player.skin.loadFromObject(data.skin,true);
-		player.clawsPart.loadFromObject(data.clawsPart,true);
-		player.facePart.loadFromObject(data.faceType,true);
-		player.tail.loadFromObject(saveFile.data.tail,true);
+		player.underBody.loadFromObject(data.underBody||{},true);
+		player.lowerBodyPart.loadFromObject(data.lowerBodyPart||{},true);
+		player.skin.loadFromObject(data.skin||{},true);
+		player.clawsPart.loadFromObject(data.clawsPart||{},true);
+		player.facePart.loadFromObject(data.facePart||{},true);
+		player.tail.loadFromObject(data.tail||{},true);
 		if (saveFile.data.tongueType == undefined)
 			player.tongueType = TONGUE_HUMAN;
 		else

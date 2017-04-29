@@ -124,7 +124,7 @@ public class Utils extends Object
 				} else if (hasDefault) {
 					if (def is Function) v = def();
 					else v = def();
-				}
+				} else continue;
 				try {
 					dest[dkey] = v;
 				} catch (e:*) {
