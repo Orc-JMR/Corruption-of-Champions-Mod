@@ -13,9 +13,9 @@ public class SimpleJsonable implements Jsonable{
 		myPublicPrimitives.push.apply(myPublicPrimitives,args);
 	}
 	/**
-	 * @return names of !public! !Jsonable!-typed properties that should be saved/loaded
+	 * @return name of !public! !Jsonable!-typed property that should be saved/loaded
 	 */
-	protected function addPublicJsonable(arg:Jsonable):void {
+	protected function addPublicJsonable(arg:String):void {
 		myPublicJsonables.push(arg);
 	}
 	public function saveToObject():Object {

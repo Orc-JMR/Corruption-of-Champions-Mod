@@ -868,6 +868,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.thickness = player.thickness;
 		saveFile.data.tone = player.tone;
 		saveFile.data.tallness = player.tallness;
+		saveFile.data.furColor = player.furColor;
 		saveFile.data.hairColor = player.hairColor;
 		saveFile.data.hairType = player.hairType;
 		saveFile.data.gillType = player.gillType;
@@ -876,23 +877,39 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.beardLength = player.beardLength;
 		saveFile.data.eyeType = player.eyeType;
 		saveFile.data.beardStyle = player.beardStyle;
+		saveFile.data.skinType = player.skinType;
+		saveFile.data.skinTone = player.skinTone;
+		saveFile.data.skinDesc = player.skinDesc;
+		saveFile.data.skinAdj = player.skinAdj;
+		saveFile.data.faceType = player.faceType;
 		saveFile.data.tongueType = player.tongueType;
 		saveFile.data.earType = player.earType;
 		saveFile.data.earValue = player.earValue;
 		saveFile.data.antennae = player.antennae;
 		saveFile.data.horns = player.horns;
 		saveFile.data.hornType = player.hornType;
+		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
+		saveFile.data.underBody = player.underBody;
+		// </mod>
+		// <mod name="Predator arms" author="Stadler76">
+		saveFile.data.clawTone = player.clawTone;
+		saveFile.data.clawType = player.clawType;
+		// </mod>
 		/*for each (var key:String in ["underBody","lowerBodyPart","skin","clawsPart"]) {
 			saveFile.data[key] = (player[key] as SimpleJsonable).saveToObject();
 		}*/
 		saveFile.data.face = player.facePart.saveToObject();
-		saveFile.data.underBody = player.underBody.saveToObject();
 		saveFile.data.lowerBodyPart = player.lowerBodyPart.saveToObject();
 		saveFile.data.skin = player.skin.saveToObject();
 		saveFile.data.clawsPart = player.clawsPart.saveToObject();
 
 		saveFile.data.wingDesc = player.wingDesc;
 		saveFile.data.wingType = player.wingType;
+		saveFile.data.lowerBody = player.lowerBody;
+		saveFile.data.legCount = player.legCount;
+		saveFile.data.tailType = player.tailType;
+		saveFile.data.tailVenum = player.tailVenom;
+		saveFile.data.tailRecharge = player.tailRecharge;
 		saveFile.data.hipRating = player.hipRating;
 		saveFile.data.buttRating = player.buttRating;
 		
@@ -1762,7 +1779,6 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		/*for each (var key:String in ["underBody","lowerBodyPart","skin","clawPart"]) {
 			(player[key] as SimpleJsonable).loadFromObject(saveFile.data[key],true);
 		}*/
-		player.underBody.loadFromObject(data.underBody||{},true);
 		player.lowerBodyPart.loadFromObject(data.lowerBodyPart||{},true);
 		player.skin.loadFromObject(data.skin||{},true);
 		player.clawsPart.loadFromObject(data.clawsPart||{},true);
@@ -1789,6 +1805,11 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			player.hornType = HORNS_NONE;
 		else
 			player.hornType = saveFile.data.hornType;
+
+		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
+		if (saveFile.data.underBody is UnderBody)
+			player.underBody.setAllProps(saveFile.data.underBody);
+		// </mod>
 
 		player.wingDesc = saveFile.data.wingDesc;
 		player.wingType = saveFile.data.wingType;

@@ -32,21 +32,23 @@ public class Skin extends BodyPart {
 		return skinzilla + " " + desc;
 	}
 
-
-	override public function describe(options:Object):String {
+	public function description(noAdj:Boolean = false, noTone:Boolean = false):String
+	{
 		var skinzilla:String = "";
 
 		//Adjectives first!
-		if (!options.noTone) {
-			if (adj != "" && !options.noTone && tone != "rough gray")
-				skinzilla += adj + ", ";
+		if (!noAdj && adj != "" && !noTone && tone != "rough gray")
+			skinzilla += adj + ", ";
+		if (!noTone)
 			skinzilla += tone + " ";
-		}
 
 		//Fur handled a little differently since it uses haircolor
 		skinzilla += hasFur() ? "skin" : desc;
 
 		return skinzilla;
+	}
+	override public function describe(options:Object):String {
+		return description(!!options.noAdj,!!options.noTone);
 	}
 	/*[INTERMOD:xianxia]
 	public function hasChitin():Boolean {

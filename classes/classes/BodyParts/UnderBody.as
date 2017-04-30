@@ -1,37 +1,39 @@
 package classes.BodyParts 
 {
 import classes.Creature;
-import classes.internals.SimpleJsonable;
 
 /**
 	 * Container class for the players underbody
 	 * @since December 31, 2016
 	 * @author Stadler76
 	 */
-	public class UnderBody extends BodyPart
+	public class UnderBody
 	{
 		include "../../../includes/appearanceDefs.as";
 
+		public var type:Number = UNDER_BODY_TYPE_NONE;
 		public var skin:Skin;
 
-		public function UnderBody(creature:Creature)
+		private var _creature:Creature;
+
+		public function UnderBody(creature:Creature = null)
 		{
-			super(creature);
-			this.skin = new Skin(creature);
-			addPublicJsonable(skin);
+			_creature = creature;
+			skin = new Skin(creature);
 		}
 
+		public function skinDescription(...args):String { return skin.description.apply(skin, args); }
 		public function skinFurScales(...args):String { return skin.skinFurScales.apply(skin, args); }
 
 		public function copySkin(p:Object = null):void
 		{
-			skin.setProps(creature.skin);
+			skin.setProps(_creature.skin);
 			if (p != null) skin.setProps(p);
 		}
 
-		override public function restore(keepTone:Boolean = true):void
+		public function restore(keepTone:Boolean = true):void
 		{
-			super.restore(keepTone);
+			type  = UNDER_BODY_TYPE_NONE;
 			skin.restore(keepTone);
 		}
 
