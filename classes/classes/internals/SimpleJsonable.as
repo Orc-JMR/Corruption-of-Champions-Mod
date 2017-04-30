@@ -2,7 +2,10 @@
  * Created by aimozg on 25.04.2017.
  */
 package classes.internals {
+import mx.logging.ILogger;
+
 public class SimpleJsonable implements Jsonable{
+	private static const LOGGER:ILogger = LoggerFactory.getLogger(SimpleJsonable);
 	protected const myPublicPrimitives: Array = [];
 	protected const myPublicJsonables: Array = [];
 	/**
@@ -36,7 +39,7 @@ public class SimpleJsonable implements Jsonable{
 				(this[key] as Jsonable).loadFromObject(v, ignoreErrors);
 			} catch (e:*) {
 				if (!ignoreErrors) throw e;
-				trace(e);
+				LOGGER.info(e);
 			}
 		}
 	}
