@@ -2206,7 +2206,7 @@ use namespace kGAMECLASS;
 		
 		public function addToWornClothesArray(armor:Armor):void {
 			for (var i:int = 0; i < previouslyWornClothes.length; i++) {
-				if (previouslyWornClothes[i] == armor.shortName) return; //Already have?
+				if (previouslyWornClothes[i] == armor) return; //Already have?
 			}
 			previouslyWornClothes.push(armor.shortName);
 		}

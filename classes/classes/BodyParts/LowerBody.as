@@ -301,8 +301,12 @@ public class LowerBody extends BodyPart{
 		return legCount > 2 && !isDrider();
 
 	}
-	public function legs():String
-	{
+	/* [INTERMOD:xianxia]
+	public function isScylla():Boolean {
+		return type == LOWER_BODY_TYPE_SCYLLA;
+	}
+	*/
+	public function legs():String {
 		var select:Number = 0;
 		//lowerBody:
 		//4 legs - centaur!

@@ -48,7 +48,30 @@ public class Skin extends BodyPart {
 
 		return skinzilla;
 	}
-
+	/*[INTERMOD:xianxia]
+	public function hasChitin():Boolean {
+		return [SKIN_TYPE_CHITIN, SKIN_TYPE_PARTIAL_CHITIN].indexOf(type) != -1;
+	}
+	public function hasBark():Boolean {
+		return [SKIN_TYPE_BARK, SKIN_TYPE_PARTIAL_BARK].indexOf(type) != -1;
+	}
+	public function isPartiallyCovered():Boolean {
+		return [
+				   SKIN_TYPE_PARTIAL_FUR, SKIN_TYPE_PARTIAL_BARK, SKIN_TYPE_PARTIAL_SCALES, SKIN_TYPE_PARTIAL_CHITIN
+			   ].indexOf(type) != -1;
+	}
+	public function isCovered():Boolean {
+		return isPartiallyCovered()
+			   || [
+					  SKIN_TYPE_FUR, SKIN_TYPE_BARK, SKIN_TYPE_SCALES, SKIN_TYPE_CHITIN
+				  ].indexOf(type) != -1;
+	}
+	public function isFacePartiallyCovered():Boolean {
+		return [
+				   SKIN_TYPE_SCALES, SKIN_TYPE_PARTIAL_SCALES, SKIN_TYPE_FUR
+			   ].indexOf(type) != -1;
+	}
+	*/
 	public function hasFur():Boolean {
 		return type == SKIN_TYPE_FUR;
 	}
@@ -80,8 +103,27 @@ public class Skin extends BodyPart {
 		return type == SKIN_TYPE_GOO;
 	}
 
-	public function hasPlainSkin():Boolean {
+	public function hasPlainSkinOnly(allowTatoo:Boolean = true):Boolean {
 		return type == SKIN_TYPE_PLAIN;
+		/*[INTERMOD:xianxia]
+		return type == SKIN_TYPE_PLAIN
+			   || allowTatoo && type == SKIN_TYPE_TATTOED;
+			   */
+	}
+	public function hasPlainSkin(allowTatoo:Boolean = true):Boolean {
+		return hasPlainSkinOnly();
+		/*[INTERMOD:xianxia]
+		return hasPlainSkinOnly()
+			   || isPartiallyCovered()
+			   || allowTatoo && type == SKIN_TYPE_TATTOED;
+			   */
+	}
+	public function hasSmoothSkinType(allowPartiallyCovered:Boolean = true):Boolean {
+		return isAny(SKIN_TYPE_PLAIN, SKIN_TYPE_GOO);
+		/*[INTERMOD:xianxia]
+		return isAny(SKIN_TYPE_TATTOED, SKIN_TYPE_PLAIN, SKIN_TYPE_GOO, SKIN_TYPE_STONE)
+			   || allowPartiallyCovered && isPartiallyCovered();
+			   */
 	}
 	override public function restore(keepTone:Boolean = true):void {
 		super.restore(keepTone);
