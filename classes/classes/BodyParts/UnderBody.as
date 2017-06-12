@@ -7,7 +7,7 @@ package classes.BodyParts
 	 * @since December 31, 2016
 	 * @author Stadler76
 	 */
-	public class UnderBody 
+	public class UnderBody extends SaveableBodyPart
 	{
 		include "../../../includes/appearanceDefs.as";
 
@@ -18,6 +18,8 @@ package classes.BodyParts
 
 		public function UnderBody(creature:Creature = null)
 		{
+			super("underBody",["type"]);
+			addPublicJsonables(["skin"]);
 			_creature = creature;
 		}
 
@@ -30,7 +32,7 @@ package classes.BodyParts
 			if (p != null) skin.setProps(p);
 		}
 
-		public function restore(keepTone:Boolean = true):void
+		override public function restore(keepTone:Boolean = true):void
 		{
 			type  = UNDER_BODY_TYPE_NONE;
 			skin.restore(keepTone);
@@ -46,6 +48,11 @@ package classes.BodyParts
 		{
 			restore(keepTone);
 			setProps(p);
+		}
+		
+		override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
+			restore(false);
+			super.loadFromObject(o, ignoreErrors);
 		}
 	}
 }

@@ -883,10 +883,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.eyeType = player.eyeType;
 		saveFile.data.eyeCount = player.eyeCount;
 		saveFile.data.beardStyle = player.beardStyle;
-		saveFile.data.skinType = player.skinType;
-		saveFile.data.skinTone = player.skinTone;
-		saveFile.data.skinDesc = player.skinDesc;
-		saveFile.data.skinAdj = player.skinAdj;
+		player.skin.saveToSaveData(saveFile.data);
 		saveFile.data.faceType = player.faceType;
 		saveFile.data.tongueType = player.tongueType;
 		saveFile.data.earType = player.earType;
@@ -895,7 +892,7 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.horns = player.horns;
 		saveFile.data.hornType = player.hornType;
 		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
-		saveFile.data.underBody = player.underBody;
+		player.underBody.saveToSaveData(saveFile.data);
 		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		saveFile.data.clawTone = player.clawTone;
@@ -1677,81 +1674,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		else
 			player.armType = saveFile.data.armType;
 		player.hairLength = saveFile.data.hairLength;
-		player.skinType = saveFile.data.skinType;
-		if (saveFile.data.skinAdj == undefined)
-			player.skinAdj = "";
-		else
-			player.skinAdj = saveFile.data.skinAdj;
-		player.skinTone = saveFile.data.skinTone;
-		player.skinDesc = saveFile.data.skinDesc;
-		//Silently discard SKIN_TYPE_UNDEFINED
-		if (player.skinType == SKIN_TYPE_UNDEFINED)
-		{
-			player.skinAdj = "";
-			player.skinDesc = "skin";
-			player.skinType = SKIN_TYPE_PLAIN;
-		}
-		//Convert from old skinDesc to new skinAdj + skinDesc!
-		if (player.skinDesc.indexOf("smooth") != -1)
-		{
-			player.skinAdj = "smooth";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("thick") != -1)
-		{
-			player.skinAdj = "thick";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("rubber") != -1)
-		{
-			player.skinAdj = "rubber";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("latex") != -1)
-		{
-			player.skinAdj = "latex";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
-		if (player.skinDesc.indexOf("slimey") != -1)
-		{
-			player.skinAdj = "slimey";
-			if (player.hasPlainSkin())
-				player.skinDesc = "skin";
-			if (player.hasFur())
-				player.skinDesc = "fur";
-			if (player.hasScales())
-				player.skinDesc = "scales";
-			if (player.hasGooSkin())
-				player.skinDesc = "goo";
-		}
+		player.skin.loadFromSaveData(saveFile.data);
 		player.faceType = saveFile.data.faceType;
 		if (saveFile.data.tongueType == undefined)
 			player.tongueType = TONGUE_HUMAN;
@@ -1776,8 +1699,7 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			player.hornType = saveFile.data.hornType;
 
 		// <mod name="BodyParts.Skin and UnderBody" author="Stadler76">
-		if (saveFile.data.underBody is UnderBody)
-			player.underBody.setAllProps(saveFile.data.underBody);
+		player.underBody.loadFromSaveData(saveFile.data);
 		// </mod>
 		// <mod name="Predator arms" author="Stadler76">
 		player.clawTone = (saveFile.data.clawTone == undefined) ? ""               : saveFile.data.clawTone;

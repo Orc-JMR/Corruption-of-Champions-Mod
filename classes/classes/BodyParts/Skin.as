@@ -1,11 +1,14 @@
 package classes.BodyParts 
 {
+	import classes.Appearance;
+	import classes.internals.SimpleJsonable;
+
 	/**
 	 * Container class for the players skin
 	 * @since December 27, 2016
 	 * @author Stadler76
 	 */
-	public class Skin 
+	public class Skin extends SaveableBodyPart
 	{
 		include "../../../includes/appearanceDefs.as";
 
@@ -15,7 +18,9 @@ package classes.BodyParts
 		public var adj:String = "";
 		public var furColor:String = "no";
 
-		public function Skin() {}
+		public function Skin() {
+			super("skin",["type","tone","desc","adj","furColor"]);
+		}
 
 		public function skinFurScales():String
 		{
@@ -61,7 +66,7 @@ package classes.BodyParts
 			return [SKIN_TYPE_FUR, SKIN_TYPE_WOOL].indexOf(type) != -1;
 		}
 
-		public function restore(keepTone:Boolean = true):void
+		override public function restore(keepTone:Boolean = true):void
 		{
 			type = SKIN_TYPE_PLAIN;
 			if (!keepTone) tone = "albino";
@@ -84,5 +89,54 @@ package classes.BodyParts
 			restore(keepTone);
 			setProps(p);
 		}
+		
+		
+		override protected function saveToOldSave(savedata:Object):void {
+			savedata.skinType    = type;
+			savedata.skinDesc    = desc;
+			savedata.skinAdj     = adj;
+			savedata.skinTone    = tone;
+			savedata.furColor    = furColor;
+		}
+		override protected function loadFromOldSave(savedata:Object):void {
+			type = intOr(savedata.skinType, SKIN_TYPE_PLAIN);
+			adj = stringOr(savedata.skinAdj, "");
+			tone = stringOr(savedata.skinTone, "albino");
+			desc = stringOr(savedata.skinDesc, Appearance.DEFAULT_SKIN_DESCS[type]);
+			//Silently discard SKIN_TYPE_UNDEFINED
+			if (type == SKIN_TYPE_UNDEFINED)
+			{
+				adj = "";
+				desc = "skin";
+				type = SKIN_TYPE_PLAIN;
+			}
+			//Convert from old skinDesc to new skinAdj + skinDesc!
+			if (desc.indexOf("smooth") != -1)
+			{
+				adj = "smooth";
+				desc = Appearance.DEFAULT_SKIN_DESCS[type];
+			}
+			if (desc.indexOf("thick") != -1)
+			{
+				adj = "thick";
+				desc = Appearance.DEFAULT_SKIN_DESCS[type];
+			}
+			if (desc.indexOf("rubber") != -1)
+			{
+				adj = "rubber";
+				desc = Appearance.DEFAULT_SKIN_DESCS[type];
+			}
+			if (desc.indexOf("latex") != -1)
+			{
+				adj = "latex";
+				desc = Appearance.DEFAULT_SKIN_DESCS[type];
+			}
+			if (desc.indexOf("slimey") != -1)
+			{
+				adj = "slimey";
+				desc = Appearance.DEFAULT_SKIN_DESCS[type];
+			}
+		}
+	
 	}
 }
