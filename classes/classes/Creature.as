@@ -1,4 +1,4 @@
-﻿//CoC Creature.as
+﻿﻿//CoC Creature.as
 package classes
 {
 	import classes.BodyParts.Skin;
@@ -9,15 +9,18 @@ package classes
 	import classes.PerkType;
 	import classes.StatusEffectType;
 	import classes.Items.JewelryLib;
-	import classes.internals.Utils;
+import classes.internals.LoggerFactory;
+import classes.internals.Utils;
 	import classes.VaginaClass;
 	import classes.Scenes.Places.TelAdre.UmasShop;
 	import flash.display.InteractiveObject;
 	import flash.errors.IllegalOperationError;
 
-	public class Creature extends Utils
-	{
+import mx.logging.ILogger;
 
+public class Creature extends Utils
+	{
+		private static const LOGGER:ILogger = LoggerFactory.getLogger(Creature);
 		include "../../includes/appearanceDefs.as";
 
 		public function get game():CoC {
@@ -665,84 +668,15 @@ package classes
 		//Create a perk
 		public function createPerk(ptype:PerkType, value1:Number, value2:Number, value3:Number, value4:Number):void
 		{
-			var newKeyItem:PerkClass = new PerkClass(ptype);
-			//used to denote that the array has already had its new spot pushed on.
-			var arrayed:Boolean = false;
-			//used to store where the array goes
-			var keySlot:Number = 0;
-			var counter:Number = 0;
-			//Start the array if its the first bit
-			if (perks.length == 0)
-			{
-				//trace("New Perk Started Array! " + keyName);
-				perks.push(newKeyItem);
-				arrayed = true;
-				keySlot = 0;
+			addPerk(new PerkClass(ptype,value1,value2,value3,value4));
+		}
+		public function addPerk(perk:PerkClass):void {
+			if (hasPerk(perk.ptype)) {
+				LOGGER.error("Duplicate perk, won't create: "+perk.ptype.id);
+			} else {
+				perks.push(perk);
+				perks.sortOn("perkName");
 			}
-			//If it belongs at the end, push it on
-			if (perk(perks.length - 1).perkName < ptype.name && !arrayed)
-			{
-				//trace("New Perk Belongs at the end!! " + keyName);
-				perks.push(newKeyItem);
-				arrayed = true;
-				keySlot = perks.length - 1;
-			}
-			//If it belongs in the beginning, splice it in
-			if (perk(0).perkName > ptype.name && !arrayed)
-			{
-				//trace("New Perk Belongs at the beginning! " + keyName);
-				perks.splice(0, 0, newKeyItem);
-				arrayed = true;
-				keySlot = 0;
-			}
-			//Find the spot it needs to go in and splice it in.
-			if (!arrayed)
-			{
-				//trace("New Perk using alphabetizer! " + keyName);
-				counter = perks.length;
-				while (counter > 0 && !arrayed)
-				{
-					counter--;
-					//If the current slot is later than new key
-					if (perk(counter).perkName > ptype.name)
-					{
-						//If the earlier slot is earlier than new key && a real spot
-						if (counter - 1 >= 0)
-						{
-							//If the earlier slot is earlier slot in!
-							if (perk(counter - 1).perkName <= ptype.name)
-							{
-								arrayed = true;
-								perks.splice(counter, 0, newKeyItem);
-								keySlot = counter;
-							}
-						}
-						//If the item after 0 slot is later put here!
-						else
-						{
-							//If the next slot is later we are go
-							if (perk(counter).perkName <= ptype.name) {
-								arrayed = true;
-								perks.splice(counter, 0, newKeyItem);
-								keySlot = counter;
-							}
-						}
-					}
-				}
-			}
-			//Fallback
-			if (!arrayed)
-			{
-				//trace("New Perk Belongs at the end!! " + keyName);
-				perks.push(newKeyItem);
-				keySlot = perks.length - 1;
-			}
-			
-			perk(keySlot).value1 = value1;
-			perk(keySlot).value2 = value2;
-			perk(keySlot).value3 = value3;
-			perk(keySlot).value4 = value4;
-			//trace("NEW PERK FOR PLAYER in slot " + keySlot + ": " + perk(keySlot).perkName);
 		}
 
 		/**
@@ -921,6 +855,9 @@ package classes
 			statusEffects.push(newStatusEffect);
 			//trace("createStatusEffect -> "+statusEffects.join(","));
 			//trace("NEW STATUS APPLIED TO PLAYER!: " + statusName);
+		}
+		public function addStatusEffect(sclass:StatusEffectClass):void {
+			statusEffects.push(sclass);
 		}
 		
 		//Remove a status

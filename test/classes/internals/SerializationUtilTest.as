@@ -19,22 +19,8 @@ package classes.internals
 		private var testVector:Vector.<ISerializable>;
 		private var testAMFVector:Vector.<ISerializableAMF>;
 		private var deserializedVector:Vector.<*>;
-		
-		private function buildVector(instances:int):void
-		{
-			for (var i:int = 0; i < instances; i++)
-			{
-				testVector.push(new SerializationDummy(i, i + 1));
-			}
-		}
-		
-		private function buildAmfVector(instances:int):void
-		{
-			for (var i:int = 0; i < instances; i++)
-			{
-				testAMFVector.push(new AMFSerializationDummy(i, i + 1));
-			}
-		}
+		private var testArray:Array;
+		private var deserializedArray:Array;
 		
 		private function getTestObject():* {
 			return SerializationUtils.serializeVector(testVector as Vector.<*>);
@@ -47,9 +33,13 @@ package classes.internals
 			testVector = new Vector.<ISerializable>();
 			testAMFVector = new Vector.<ISerializableAMF>();
 			deserializedVector = new Vector.<*>();
-			
-			buildVector(TEST_INSTANCES);
-			buildAmfVector(TEST_INSTANCES);
+			testArray = [];
+			deserializedArray = [];
+			for (var i:int = 0; i < TEST_INSTANCES; i++) {
+				testVector.push(new SerializationDummy(i, i + 1));
+				testAMFVector.push(new AMFSerializationDummy(i, i + 1));
+				testArray.push(new SerializationDummy(i, i + 1));
+			}
 		}
 		
 		[Test]
@@ -175,6 +165,65 @@ package classes.internals
 			var vector:Vector.<ISerializableAMF> = deserializeAMF();
 			
 			assertThat(vector[TEST_INSTANCES - 1], hasProperties({foo: TEST_INSTANCES - 1, bar: TEST_INSTANCES}));
+		}
+
+		[Test]
+		public function serializeArrayObjectSize():void
+		{
+			testObject = getTestObject();
+			
+			assertThat(testObject, arrayWithSize(TEST_INSTANCES));
+		}
+		
+		[Test]
+		public function serializeArrayLastObjectValue():void
+		{
+			testObject = getTestObject();
+			
+			assertThat(testObject[TEST_INSTANCES - 1], hasProperties({foo: TEST_INSTANCES - 1, bar: TEST_INSTANCES}));
+		}
+		
+		[Test]
+		public function deserializeArraySize():void {
+			testObject = getTestObject();
+			
+			SerializationUtils.deserializeArray(deserializedArray, testObject, SerializationDummy);
+			
+			assertThat(deserializedArray, arrayWithSize(TEST_INSTANCES));
+		}
+		
+		[Test]
+		public function deserializeArrayType():void {
+			testObject = getTestObject();
+			
+			SerializationUtils.deserializeArray(deserializedArray,testObject, SerializationDummy);
+			
+			assertThat(deserializedArray[TEST_INSTANCES - 1], instanceOf(SerializationDummy));
+		}
+		
+		[Test]
+		public function deserializeArrayLastElementProperties():void {
+			testObject = getTestObject();
+			
+			SerializationUtils.deserializeArray(deserializedArray, testObject, SerializationDummy);
+			
+			assertThat(deserializedArray[TEST_INSTANCES - 1], hasProperties({foo: TEST_INSTANCES - 1}));
+			assertThat((deserializedArray[TEST_INSTANCES - 1] as SerializationDummy).getBar(), equalTo(TEST_INSTANCES));
+		}
+		
+		[Test(expected="ArgumentError")]
+		public function deserializeArrayWithNonSerializableType():void {
+			SerializationUtils.deserializeArray([], [], String);
+		}
+				
+		[Test(expected="ArgumentError")]
+		public function deserializeArrayWithNullDestination():void {
+			SerializationUtils.deserializeArray(null, [], SerializationDummy);
+		}
+		
+		[Test(expected="ArgumentError")]
+		public function deserializeArrayWithNullSource():void {
+			SerializationUtils.deserializeArray([], null, SerializationDummy);
 		}
 	}
 }

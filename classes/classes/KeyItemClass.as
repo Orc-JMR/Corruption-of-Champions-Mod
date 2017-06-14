@@ -1,10 +1,13 @@
 ﻿package classes
 {
-	public class KeyItemClass extends Object
+import classes.internals.SimpleSerializable;
+
+public class KeyItemClass extends SimpleSerializable
 	{
 		//constructor
 		public function KeyItemClass()
 		{
+			addPublicPrimitives(["keyName","value1","value2","value3","value4"]);
 		}
 		
 		//data

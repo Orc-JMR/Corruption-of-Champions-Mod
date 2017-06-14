@@ -1,10 +1,13 @@
 ﻿package classes
 {
-	public class StatusEffectClass
+	import classes.internals.SimpleSerializable;
+
+	public class StatusEffectClass extends SimpleSerializable
 	{
 		//constructor
 		public function StatusEffectClass(stype:StatusEffectType,value1:Number=0,value2:Number=0,value3:Number=0,value4:Number=0)
 		{
+			addPublicPrimitives(["value1","value2","value3","value4"]);
 			this._stype = stype;
 			this.value1 = value1;
 			this.value2 = value2;
@@ -26,6 +29,21 @@
 		public function toString():String
 		{
 			return "["+_stype+","+value1+","+value2+","+value3+","+value4+"]";
+		}
+		override public function saveToObject(o:Object = null):Object {
+			o = super.saveToObject();
+			o.statusAffectName = _stype.id;
+			return o;
+		}
+		override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
+			super.loadFromObject(o, ignoreErrors);
+
+			var id:String = o.statusAffectName;
+
+			_stype = StatusEffectType.lookupStatusEffect(id);
+			if (!_stype && !ignoreErrors) {
+				throw new Error("ERROR: Unknown perk id=" + id)
+			}
 		}
 	}
 }

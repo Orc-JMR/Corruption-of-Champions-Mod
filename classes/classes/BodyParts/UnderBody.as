@@ -19,7 +19,7 @@ package classes.BodyParts
 		public function UnderBody(creature:Creature = null)
 		{
 			super("underBody",["type"]);
-			addPublicJsonables(["skin"]);
+			addPublicSerializables(["skin"]);
 			_creature = creature;
 		}
 
@@ -53,6 +53,11 @@ package classes.BodyParts
 		override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
 			restore(false);
 			super.loadFromObject(o, ignoreErrors);
+			// Fix deprecated and merged underBody-types
+			switch (type) {
+				case UNDER_BODY_TYPE_DRAGON: type = UNDER_BODY_TYPE_REPTILE; break;
+				case UNDER_BODY_TYPE_WOOL:   type = UNDER_BODY_TYPE_FURRY;   break;
+			}
 		}
 	}
 }

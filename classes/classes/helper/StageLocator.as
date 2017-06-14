@@ -1,5 +1,6 @@
 package classes.helper {
 	import flash.display.Stage;
+	import mx.core.FlexGlobals;
 
 /**
  * Helper class to deal with the CoC class GUI dependency.
@@ -9,11 +10,17 @@ package classes.helper {
  */
 	public class StageLocator {
 		public static var instance:StageLocator;
-		public static var stage:Stage;
+		private static var _stage:Stage;
 
 		public function StageLocator ($stage:Stage) {
 			instance = this;
-			stage = $stage;
+			_stage   = $stage;
+		}
+		public static function get stage():Stage {
+			if (!_stage && FlexGlobals.topLevelApplication) {
+				_stage = FlexGlobals.topLevelApplication.stage;
+			}
+			return _stage;
 		}
 	}
 }

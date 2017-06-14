@@ -1,9 +1,11 @@
 package classes
 {
+	import classes.BodyParts.SaveableBodyPart;
 	import classes.CockTypesEnum;
+	import classes.internals.SimpleSerializable;
 	import classes.internals.Utils;
 
-	public class Cock
+	public class Cock extends SimpleSerializable
 	{		
 		private var _cockLength:Number;
 		private var _cockThickness:Number;		
@@ -43,6 +45,7 @@ package classes
 		//constructor. Default type is HUMAN
 		public function Cock(i_cockLength:Number = 5.5, i_cockThickness:Number = 1, i_cockType:CockTypesEnum=null)
 		{
+			addPublicPrimitives(["cockThickness","cockLength","knotMultiplier","sock","pierced","pShortDesc","pLongDesc"]);
 			if (i_cockType == null) i_cockType = CockTypesEnum.HUMAN;
 			_cockLength = i_cockLength;
 			_cockThickness = i_cockThickness;
@@ -329,5 +332,20 @@ package classes
 		}
 		//} endregion
 
+
+		override public function saveToObject(o:Object = null):Object {
+			o = super.saveToObject();
+			o.cockType = cockType.Index;
+			return o;
+		}
+		override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
+			super.loadFromObject(o, ignoreErrors);
+			if (pShortDesc == "null" || pLongDesc == "null") {
+				pierced = 0;
+				pShortDesc = "";
+				pLongDesc = "";
+			}
+			cockType = CockTypesEnum.ParseConstantByIndex(intOr(o.cockType,0));
+		}
 	}
 }

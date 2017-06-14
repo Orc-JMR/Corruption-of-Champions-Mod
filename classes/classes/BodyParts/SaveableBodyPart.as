@@ -2,9 +2,9 @@
  * Created by aimozg on 01.05.2017.
  */
 package classes.BodyParts {
-import classes.internals.SimpleJsonable;
+import classes.internals.SimpleSerializable;
 
-public class SaveableBodyPart extends SimpleJsonable {
+public class SaveableBodyPart extends SimpleSerializable {
 	private var keyInSaveData:String;
 	public function SaveableBodyPart(keyInSaveData:String, publicPrimitives:Array) {
 		super();

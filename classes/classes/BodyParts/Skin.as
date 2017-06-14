@@ -1,7 +1,7 @@
 package classes.BodyParts 
 {
 	import classes.Appearance;
-	import classes.internals.SimpleJsonable;
+	import classes.internals.SimpleSerializable;
 
 	/**
 	 * Container class for the players skin

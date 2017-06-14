@@ -335,38 +335,5 @@ package classes.internals
 			if (n == 1) return "one " + name;
 			return n + " " + pluralForm;
 		}
-
-		/* None of these functions are called anymore
-		// lazy(obj,arg1,...,argN)() = obj[arg1]...[argN]
-		public static function lazyIndex(obj:*,...args):Function{
-			return function():*{
-				while(args.length>0)
-					obj=obj[args.shift()];
-				return obj;
-			};
-		}
-		// lazy2(func,arg1,...,argN)() = func()[arg1]...[argN]
-		public static function lazyCallIndex(func:Function,...args):Function{
-			var _args:Array = args.slice();
-			return function():*{
-				var obj:*=func();
-				var __args:Array = _args.slice();
-				while(__args.length>0)
-					obj=obj[__args.shift()];
-				return obj
-			};
-		}
-		// lazy2(func,arg1,...,argN)(args2) = func()[arg1]...[argN](args2)
-		public static function lazyCallIndexCall(func:Function,...args):Function{
-			var _args:Array = args.slice();
-			return function (...fargs):*{
-				var obj:*=func();
-				var __args:Array = _args.slice();
-				while(__args.length>0)
-					obj=obj[__args.shift()];
-				return obj.apply(null,fargs);
-			};
-		}
-		*/
 	}
 }

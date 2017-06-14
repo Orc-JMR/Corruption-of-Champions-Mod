@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AllTestsSuit" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" nameIsGenerated="true" appDescriptorForEmulator="Android" class_name="AllTestsSuit" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+    <option name="BCName" value="CoC-test" />
+    <option name="launcherParameters">
+      <LauncherParameters>
+        <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+        <option name="launcherType" value="OSDefault" />
+        <option name="newPlayerInstance" value="false" />
+        <option name="playerPath" value="FlashPlayerDebugger.exe" />
+      </LauncherParameters>
+    </option>
+    <option name="moduleName" value="Corruption-of-Champions" />
+    <option name="trusted" value="true" />
+    <method />
+  </configuration>
+</component>

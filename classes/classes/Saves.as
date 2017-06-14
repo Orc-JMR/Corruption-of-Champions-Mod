@@ -4,7 +4,8 @@ package classes
 	import classes.BodyParts.UnderBody;
 	import classes.GlobalFlags.kGAMECLASS;
 	import classes.GlobalFlags.kACHIEVEMENTS;
-	import classes.Scenes.Inventory;
+import classes.KeyItemClass;
+import classes.Scenes.Inventory;
 	import classes.Scenes.Places.TelAdre.Katherine;
 	import classes.internals.LoggerFactory;
 	import classes.internals.ISerializable;
@@ -936,93 +937,31 @@ public function saveGameObject(slot:String, isFile:Boolean):void
 		saveFile.data.keyItems = [];
 		saveFile.data.itemStorage = [];
 		saveFile.data.gearStorage = [];
-		//Set array
-		for (i = 0; i < player.cocks.length; i++)
-		{
-			saveFile.data.cocks.push([]);
-		}
 		//Populate Array
 		for (i = 0; i < player.cocks.length; i++)
 		{
-			saveFile.data.cocks[i].cockThickness = player.cocks[i].cockThickness;
-			saveFile.data.cocks[i].cockLength = player.cocks[i].cockLength;
-			saveFile.data.cocks[i].cockType = player.cocks[i].cockType.Index;
-			saveFile.data.cocks[i].knotMultiplier = player.cocks[i].knotMultiplier;
-			saveFile.data.cocks[i].pierced = player.cocks[i].pierced;
-			saveFile.data.cocks[i].pShortDesc = player.cocks[i].pShortDesc;
-			saveFile.data.cocks[i].pLongDesc = player.cocks[i].pLongDesc;
-			saveFile.data.cocks[i].sock = player.cocks[i].sock;
+			saveFile.data.cocks.push(player.cocks[i].saveToObject());
 		}
 		
 		saveFile.data.vaginas = SerializationUtils.serializeVector(player.vaginas as Vector.<*>);
 		
 		//NIPPLES
 		saveFile.data.nippleLength = player.nippleLength;
-		//Set Breast Array
 		for (i = 0; i < player.breastRows.length; i++)
 		{
-			saveFile.data.breastRows.push([]);
-				//trace("Saveone breastRow");
+			saveFile.data.breastRows.push(player.breastRows[i].saveToObject());
 		}
-		//Populate Breast Array
-		for (i = 0; i < player.breastRows.length; i++)
-		{
-			//trace("Populate One BRow");
-			saveFile.data.breastRows[i].breasts = player.breastRows[i].breasts;
-			saveFile.data.breastRows[i].breastRating = player.breastRows[i].breastRating;
-			saveFile.data.breastRows[i].nipplesPerBreast = player.breastRows[i].nipplesPerBreast;
-			saveFile.data.breastRows[i].lactationMultiplier = player.breastRows[i].lactationMultiplier;
-			saveFile.data.breastRows[i].milkFullness = player.breastRows[i].milkFullness;
-			saveFile.data.breastRows[i].fuckable = player.breastRows[i].fuckable;
-			saveFile.data.breastRows[i].fullness = player.breastRows[i].fullness;
-		}
-		//Set Perk Array
-		//Populate Perk Array
 		for (i = 0; i < player.perks.length; i++)
 		{
-			saveFile.data.perks.push([]);
-			//trace("Saveone Perk");
-			//trace("Populate One Perk");
-			saveFile.data.perks[i].id = player.perk(i).ptype.id;
-			//saveFile.data.perks[i].perkName = player.perk(i).ptype.id; //uncomment for backward compatibility
-			saveFile.data.perks[i].value1 = player.perk(i).value1;
-			saveFile.data.perks[i].value2 = player.perk(i).value2;
-			saveFile.data.perks[i].value3 = player.perk(i).value3;
-			saveFile.data.perks[i].value4 = player.perk(i).value4;
-			//saveFile.data.perks[i].perkDesc = player.perk(i).perkDesc; // uncomment for backward compatibility
+			saveFile.data.perks.push(player.perk(i).saveToObject());
 		}
-		
-		//Set Status Array
 		for (i = 0; i < player.statusEffects.length; i++)
 		{
-			saveFile.data.statusAffects.push([]);
-				//trace("Saveone statusEffects");
+			saveFile.data.statusAffects.push(player.statusEffect(i).saveToObject());
 		}
-		//Populate Status Array
-		for (i = 0; i < player.statusEffects.length; i++)
-		{
-			//trace("Populate One statusEffects");
-			saveFile.data.statusAffects[i].statusAffectName = player.statusEffect(i).stype.id;
-			saveFile.data.statusAffects[i].value1 = player.statusEffect(i).value1;
-			saveFile.data.statusAffects[i].value2 = player.statusEffect(i).value2;
-			saveFile.data.statusAffects[i].value3 = player.statusEffect(i).value3;
-			saveFile.data.statusAffects[i].value4 = player.statusEffect(i).value4;
-		}
-		//Set keyItem Array
 		for (i = 0; i < player.keyItems.length; i++)
 		{
-			saveFile.data.keyItems.push([]);
-				//trace("Saveone keyItem");
-		}
-		//Populate keyItem Array
-		for (i = 0; i < player.keyItems.length; i++)
-		{
-			//trace("Populate One keyItemzzzzzz");
-			saveFile.data.keyItems[i].keyName = player.keyItems[i].keyName;
-			saveFile.data.keyItems[i].value1 = player.keyItems[i].value1;
-			saveFile.data.keyItems[i].value2 = player.keyItems[i].value2;
-			saveFile.data.keyItems[i].value3 = player.keyItems[i].value3;
-			saveFile.data.keyItems[i].value4 = player.keyItems[i].value4;
+			saveFile.data.keyItems.push(player.keyItems[i].saveToObject());
 		}
 		//Set storage slot array
 		for (i = 0; i < itemStorageGet().length; i++)
@@ -1766,12 +1705,6 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			player.eyeCount = saveFile.data.eyeCount;
 			
 
-		// Fix deprecated and merged underBody-types
-		switch (player.underBody.type) {
-			case UNDER_BODY_TYPE_DRAGON: player.underBody.type = UNDER_BODY_TYPE_REPTILE; break;
-			case UNDER_BODY_TYPE_WOOL:   player.underBody.type = UNDER_BODY_TYPE_FURRY;   break;
-		}
-
 		//Sexual Stuff
 		player.balls = saveFile.data.balls;
 		player.cumMultiplier = saveFile.data.cumMultiplier;
@@ -1790,43 +1723,10 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		for (i = 0; i < saveFile.data.cocks.length; i++)
 		{
 			player.createCock();
+			player.cocks[i].loadFromObject(saveFile.data.cocks[i],true);
+			if (player.cocks[i].sock == "viridian") hasViridianCockSock = true;
 		}
-		//Populate Cock Array
-		for (i = 0; i < saveFile.data.cocks.length; i++)
-		{
-			player.cocks[i].cockThickness = saveFile.data.cocks[i].cockThickness;
-			player.cocks[i].cockLength = saveFile.data.cocks[i].cockLength;
-			player.cocks[i].cockType = CockTypesEnum.ParseConstantByIndex(saveFile.data.cocks[i].cockType);
-			player.cocks[i].knotMultiplier = saveFile.data.cocks[i].knotMultiplier;
-			if (saveFile.data.cocks[i].sock == undefined)
-				player.cocks[i].sock = "";
-			else
-			{
-				player.cocks[i].sock = saveFile.data.cocks[i].sock;
-				if (player.cocks[i].sock == "viridian") hasViridianCockSock = true;
-			}
-			if (saveFile.data.cocks[i].pierced == undefined)
-			{
-				player.cocks[i].pierced = 0;
-				player.cocks[i].pShortDesc = "";
-				player.cocks[i].pLongDesc = "";
-			}
-			else
-			{
-				player.cocks[i].pierced = saveFile.data.cocks[i].pierced;
-				player.cocks[i].pShortDesc = saveFile.data.cocks[i].pShortDesc;
-				player.cocks[i].pLongDesc = saveFile.data.cocks[i].pLongDesc;
-				
-				if (player.cocks[i].pShortDesc == "null" || player.cocks[i].pLongDesc == "null")
-				{
-					player.cocks[i].pierced = 0;
-					player.cocks[i].pShortDesc = "";
-					player.cocks[i].pLongDesc = "";
-				}
-			}
-				//trace("LoadOne Cock i(" + i + ")");
-		}
-		
+
 		player.vaginas = new Vector.<VaginaClass>();
 		SerializationUtils.deserializeVector(player.vaginas as Vector.<*>, saveFile.data.vaginas, VaginaClass);
 		
@@ -1834,35 +1734,9 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 			player.vaginaType(0);
 		
 		//NIPPLES
-		if (saveFile.data.nippleLength == undefined)
-			player.nippleLength = .25;
-		else
-			player.nippleLength = saveFile.data.nippleLength;
+		player.nippleLength = numberOr(saveFile.data.nippleLength,.25);
 		//Set Breast Array
-		for (i = 0; i < saveFile.data.breastRows.length; i++)
-		{
-			player.createBreastRow();
-				//trace("LoadOne BreastROw i(" + i + ")");
-		}
-		//Populate Breast Array
-		for (i = 0; i < saveFile.data.breastRows.length; i++)
-		{
-			player.breastRows[i].breasts = saveFile.data.breastRows[i].breasts;
-			player.breastRows[i].nipplesPerBreast = saveFile.data.breastRows[i].nipplesPerBreast;
-			//Fix nipplesless breasts bug
-			if (player.breastRows[i].nipplesPerBreast == 0)
-				player.breastRows[i].nipplesPerBreast = 1;
-			player.breastRows[i].breastRating = saveFile.data.breastRows[i].breastRating;
-			player.breastRows[i].lactationMultiplier = saveFile.data.breastRows[i].lactationMultiplier;
-			if (player.breastRows[i].lactationMultiplier < 0)
-				player.breastRows[i].lactationMultiplier = 0;
-			player.breastRows[i].milkFullness = saveFile.data.breastRows[i].milkFullness;
-			player.breastRows[i].fuckable = saveFile.data.breastRows[i].fuckable;
-			player.breastRows[i].fullness = saveFile.data.breastRows[i].fullness;
-			if (player.breastRows[i].breastRating < 0)
-				player.breastRows[i].breastRating = 0;
-		}
-		
+		SerializationUtils.deserializeArray(player.breastRows,saveFile.data.breastRows,BreastRowClass);
 		// Force the creation of the default breast row onto the player if it's no longer present
 		if (player.breastRows.length == 0) player.createBreastRow();
 		
@@ -1871,73 +1745,24 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		var addedSensualLover:Boolean = false;
 		
 		//Populate Perk Array
-		for (i = 0; i < saveFile.data.perks.length; i++)
-		{
-			var id:String = saveFile.data.perks[i].id || saveFile.data.perks[i].perkName;
-			var value1:Number = saveFile.data.perks[i].value1;
-			var value2:Number = saveFile.data.perks[i].value2;
-			var value3:Number = saveFile.data.perks[i].value3;
-			var value4:Number = saveFile.data.perks[i].value4;
-			
-			// Fix saves where the Whore perk might have been malformed.
-			if (id == "History: Whote") id = "History: Whore";
-			
-			// Fix saves where the Lusty Regeneration perk might have been malformed.
-			if (id == "Lusty Regeneration")
-			{
-				hasLustyRegenPerk = true;
-			}
-			else if (id == "LustyRegeneration")
-			{
-				id = "Lusty Regeneration";
-				hasLustyRegenPerk = true;
-			}
-			
-			// Some shit checking to track if the incoming data has an available History perk
-			if (id.indexOf("History:") != -1)
-			{
-				hasHistoryPerk = true;
-			}
-			
-			var ptype:PerkType = PerkType.lookupPerk(id);
-			
-			if (ptype == null) 
-			{
-				trace("ERROR: Unknown perk id="+id);
-				
-				//(saveFile.data.perks as Array).splice(i,1);
-				// NEVER EVER EVER MODIFY DATA IN THE SAVE FILE LIKE THIS. EVER. FOR ANY REASON.
-			}
-			else
-			{
-				trace("Creating perk : " + ptype);
-				player.createPerk(ptype,value1,value2,value3,value4);
-			
-				if (isNaN(player.perk(player.numPerks - 1).value1)) 
-				{
-					if (player.perk(player.numPerks - 1).perkName == "Wizard's Focus") 
-					{
-						player.perk(player.numPerks - 1).value1 = .3;
-					}
-					else
-					{
-						player.perk(player.numPerks).value1 = 0;
-					}
-					
-					trace("NaN byaaaatch: " + player.perk(player.numPerks - 1).value1);
-				}
-			
-				if (player.perk(player.numPerks - 1).perkName == "Wizard's Focus") 
-				{
-					if (player.perk(player.numPerks - 1).value1 == 0 || player.perk(player.numPerks - 1).value1 < 0.1) 
-					{
-						trace("Wizard's Focus boosted up to par (.5)");
-						player.perk(player.numPerks - 1).value1 = .5;
+		SerializationUtils.deserializeArrayEx(
+				player.perks,
+				saveFile.data.perks, {
+					factory: function ():PerkClass {
+						return new PerkClass(null);
+					},
+					filter : function (p:PerkClass):Boolean {
+						if (p == null || p.ptype == null) return false;
+						if (p.ptype == PerkLib.LustyRegeneration) {
+							hasLustyRegenPerk = true;
+						}
+						if (p.ptype.id.indexOf("History:") != -1) {
+							hasHistoryPerk = true;
+						}
+						return true;
 					}
 				}
-			}
-		}
-		
+		);
 		// Fixup missing History: Whore perk IF AND ONLY IF the flag used to track the prior selection of a history perk has been set
 		if (hasHistoryPerk == false && flags[kFLAGS.HISTORY_PERK_SELECTED] != 0)
 		{
@@ -1996,40 +1821,22 @@ public function loadGameObject(saveData:Object, slot:String = "VOID"):void
 		}
 		
 		//Set Status Array
-		for (i = 0; i < saveFile.data.statusAffects.length; i++)
-		{
-			if (saveFile.data.statusAffects[i].statusAffectName == "Lactation EnNumbere") continue; // ugh...
-			var stype:StatusEffectType = StatusEffectType.lookupStatusEffect(saveFile.data.statusAffects[i].statusAffectName);
-			if (stype == null){
-				CoC_Settings.error("Cannot find status affect '"+saveFile.data.statusAffects[i].statusAffectName+"'");
-				continue;
-			}
-			player.createStatusEffect(stype,
-					saveFile.data.statusAffects[i].value1,
-					saveFile.data.statusAffects[i].value2,
-					saveFile.data.statusAffects[i].value3,
-					saveFile.data.statusAffects[i].value4);
-				//trace("StatusEffect " + player.statusEffect(i).stype.id + " loaded.");
-		}
+		SerializationUtils.deserializeArrayEx(player.statusEffects,
+				saveFile.data.statusAffects, {
+					factory: function():StatusEffectClass{
+						return new StatusEffectClass(null);
+					},
+					filter : function (sec:StatusEffectClass):Boolean {
+						return sec != null && sec.stype != null;
+					}
+				}
+		);
 		//Make sure keyitems exist!
-		if (saveFile.data.keyItems != undefined)
-		{
-			//Set keyItems Array
-			for (i = 0; i < saveFile.data.keyItems.length; i++)
-			{
-				player.createKeyItem("TEMP", 0, 0, 0, 0);
-			}
-			//Populate keyItems Array
-			for (i = 0; i < saveFile.data.keyItems.length; i++)
-			{
-				player.keyItems[i].keyName = saveFile.data.keyItems[i].keyName;
-				player.keyItems[i].value1 = saveFile.data.keyItems[i].value1;
-				player.keyItems[i].value2 = saveFile.data.keyItems[i].value2;
-				player.keyItems[i].value3 = saveFile.data.keyItems[i].value3;
-				player.keyItems[i].value4 = saveFile.data.keyItems[i].value4;
-					//trace("KeyItem " + player.keyItems[i].keyName + " loaded.");
-			}
-		}
+		SerializationUtils.deserializeArrayEx(saveFile.data.keyItems || [],
+				player.keyItems, {
+					factory: KeyItemClass
+				}
+		);
 		//Set storage slot array
 		if (saveFile.data.itemStorage == undefined)
 		{

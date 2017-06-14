@@ -37,16 +37,16 @@ package classes.internals
 		 * @param	type of the serialized Vector
 		 * @return a deserialized Vector
 		 */
-		public static function deserializeVector(destinationVector:Vector.<*>, serializedVector:Array, type:Class):void {
+		public static function deserializeVector(destinationVector:Vector.<*>, serializedVector:Array, type:Class):Vector.<*> {
 			// 'is' will only work on an instance
 			if (!(new type() is ISerializable)) {
 				throw new ArgumentError("Type must implement Serializable");
 			}
-			
+
 			if (destinationVector === null) {
 				throw new ArgumentError("Destination Vector cannot be null");
 			}
-			
+
 			if (serializedVector === null) {
 				throw new ArgumentError("Serialized Vector cannot be null");
 			}
@@ -56,6 +56,65 @@ package classes.internals
 				instance.deserialize(element);
 				destinationVector.push(instance);
 			}
+			return destinationVector;
+		}
+
+		/**
+		 * Deserializes a Array of Serializables
+		 * @param   dst an Array where deserialized items will be written
+		 * @param	src an Array containing the serialized array
+		 * @param	type of the serialized Array
+		 * @return dst
+		 */
+		public static function deserializeArray(dst:Array, src:Array, type:Class):Array {
+			// 'is' will only work on an instance
+			if (!(new type() is ISerializable)) {
+				throw new ArgumentError("Type must implement Serializable");
+			}
+
+			deserializeArrayEx(dst, src, {
+				factory: function ():Object {
+					return new type();
+				}
+			});
+			return dst;
+		}
+
+		/**
+		 * Deserializes a Array of ISerializable
+		 * @param   dst an Array where deserialized items will be written
+		 * @param	src an Array containing the serialized array
+		 * @param	options.factory (mandatory) `Class` or `function ()=>Object` creating new instance of the object
+		 * @param	options.filter (optional) `function (T)=>Boolean` to post-process and check object.
+		 * @return dst
+		 */
+		public static function deserializeArrayEx(dst:Array, src:Array, options:Object):Array {
+			if (dst === null) {
+				throw new ArgumentError("Destination Vector cannot be null");
+			}
+			if (src === null) {
+				throw new ArgumentError("Serialized Vector cannot be null");
+			}
+			var factory:* = options.factory;
+			var factoryFn:Function;
+			if (factory is Class) {
+				factoryFn = function ():Object {
+					//noinspection JSPotentiallyInvalidConstructorUsage
+					return new factory();
+				}
+			} else {
+				factoryFn = factory as Function;
+				if  (factoryFn == null) throw new ArgumentError("Invalid options.factory");
+			}
+
+			var filter:Function = options.filter as Function;
+			for (var i:int=0,n:int=src.length;i<n;i++) {
+				var instance:ISerializable = factoryFn();
+				instance.deserialize(src[i]);
+				if (filter != null && !filter(instance)) continue;
+				dst.push(instance);
+			}
+			return dst;
 		}
 		
 		

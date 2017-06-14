@@ -1,12 +1,16 @@
 ﻿package classes
 {
-	import classes.internals.Utils;
+import classes.internals.SimpleSerializable;
+import classes.internals.Utils;
 
-	public class BreastRowClass
+	public class BreastRowClass extends SimpleSerializable
 	{
 		//constructor
 		public function BreastRowClass()
 		{
+			addPublicPrimitives([
+				"breasts","nipplesPerBreast","breastRating","lactationMultiplier","milkFullness","fuckable","fullness"
+			]);
 		}
 		public var breasts:Number = 2;
 		public var nipplesPerBreast:Number = 1;
@@ -28,21 +32,12 @@
 			]);
 			return error;
 		}
-		/*
-		0 - manchest
-		1 - A cup
-		2 - B cup
-		3 - C cup
-		4 - D cup
-		5 - DD cup
-		6 - E cup
-		7 - F cup
-		8 - G cup
-		9 - GG cup
-		10 - H
-		11 - HH cup
-		12 - HHH cup
-		13 - beachball sized
-		14 - ???*/
+
+		override public function loadFromObject(o:Object, ignoreErrors:Boolean):void {
+			super.loadFromObject(o, ignoreErrors);
+			if (nipplesPerBreast == 0) nipplesPerBreast = 1;
+			if (lactationMultiplier < 0) lactationMultiplier = 0;
+			if (breastRating < 0) breastRating = 0;
+		}
 	}
 }
