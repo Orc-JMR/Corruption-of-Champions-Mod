@@ -30,7 +30,7 @@ package classes.BodyParts
 				skinzilla += adj + ", ";
 
 			//Fur handled a little differently since it uses haircolor
-			skinzilla += isFurry() ? furColor : tone;
+			skinzilla += isFluffy() ? furColor : tone;
 
 			return skinzilla + " " + desc;
 		}
@@ -46,7 +46,7 @@ package classes.BodyParts
 				skinzilla += tone + " ";
 
 			//Fur handled a little differently since it uses haircolor
-			skinzilla += isFurry() ? "skin" : desc;
+			skinzilla += isFluffy() ? "skin" : desc;
 
 			return skinzilla;
 		}
@@ -61,9 +61,19 @@ package classes.BodyParts
 			return type == SKIN_TYPE_WOOL;
 		}
 
+		public function hasFeathers():Boolean
+		{
+			return  type == SKIN_TYPE_FEATHERED;
+		}
+
 		public function isFurry():Boolean
 		{
 			return [SKIN_TYPE_FUR, SKIN_TYPE_WOOL].indexOf(type) != -1;
+		}
+
+		public function isFluffy():Boolean
+		{
+			return [SKIN_TYPE_FUR, SKIN_TYPE_WOOL, SKIN_TYPE_FEATHERED].indexOf(type) != -1;
 		}
 
 		override public function restore(keepTone:Boolean = true):void
@@ -89,8 +99,8 @@ package classes.BodyParts
 			restore(keepTone);
 			setProps(p);
 		}
-		
-		
+
+
 		override protected function saveToOldSave(savedata:Object):void {
 			savedata.skinType    = type;
 			savedata.skinDesc    = desc;
@@ -137,6 +147,6 @@ package classes.BodyParts
 				desc = Appearance.DEFAULT_SKIN_DESCS[type];
 			}
 		}
-	
+
 	}
 }
